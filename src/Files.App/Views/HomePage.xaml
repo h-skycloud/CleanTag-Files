@@ -415,8 +415,14 @@
 
 	</UserControl.Resources>
 
+	<Grid>
+		<Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+		<CommandBar x:Name="CleanTagToolbar" DefaultLabelPosition="Right">
+			<AppBarButton Icon="MapDrive" Label="{helpers:ResourceString Name=CleanTagAnalyze}" Click="OpenCleanTag_Click"/>
+		</CommandBar>
+		<ContentControl x:Name="CleanTagHost" Grid.RowSpan="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Visibility="Collapsed"/>
 	<!--  Widget List  -->
-	<ScrollViewer Background="Transparent" RightTapped="ScrollViewer_RightTapped">
+	<ScrollViewer x:Name="WidgetsScroll" Grid.Row="1" Background="Transparent" RightTapped="ScrollViewer_RightTapped">
 		<FlyoutBase.AttachedFlyout>
 			<MenuFlyout x:Name="HomePageContextMenu">
 				<MenuFlyoutSubItem Text="{helpers:ResourceString Name=Widgets}">
@@ -548,4 +554,5 @@
 		</ListView>
 	</ScrollViewer>
 
+	</Grid>
 </Page>

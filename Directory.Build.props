@@ -1,4 +1,4 @@
-﻿<!--  Copyright (c) Files Community. Licensed under the MIT License.  -->
+<!--  Copyright (c) Files Community. Licensed under the MIT License.  -->
 <Project>
   <PropertyGroup>
 
@@ -21,4 +21,6 @@
     <CsWinRTAotWarningLevel>3</CsWinRTAotWarningLevel>
 
   </PropertyGroup>
+  <!-- Match the Roslyn version required by the upstream source generator. -->
+  <ItemGroup><PackageReference Include="Microsoft.Net.Compilers.Toolset" PrivateAssets="all" /></ItemGroup>
 </Project>

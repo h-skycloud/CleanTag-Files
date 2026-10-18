@@ -171,9 +171,7 @@ namespace Files.App
 
 				await commandsWarmupTask;
 
-				// Configure Sentry
-				if (AppLifecycleHelper.AppEnvironment is not AppEnvironment.Dev)
-					AppLifecycleHelper.ConfigureSentry();
+				// CleanTag does not initialize telemetry.
 
 				// TODO: Replace with DI
 				QuickAccessManager = Ioc.Default.GetRequiredService<QuickAccessManager>();

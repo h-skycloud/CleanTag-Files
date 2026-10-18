@@ -1,0 +1,35 @@
+<UserControl
+	x:Class="Files.App.UserControls.CleanTag.CleanTagAnalysisView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Files.App.UserControls.CleanTag"
+	xmlns:helpers="using:Files.App.Helpers"
+	Unloaded="View_Unloaded">
+	<Grid Padding="16" RowSpacing="8" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+			<RowDefinition Height="2*"/><RowDefinition Height="3*"/><RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<CommandBar DefaultLabelPosition="Right">
+			<AppBarButton Icon="Back" Label="{helpers:ResourceString Name=CleanTagHome}" Click="Back_Click"/>
+			<AppBarButton x:Name="ChooseButton" Icon="OpenFile" Label="{helpers:ResourceString Name=CleanTagChooseFolder}" Click="Choose_Click"/>
+			<AppBarButton x:Name="ScanButton" Icon="Refresh" Label="{helpers:ResourceString Name=CleanTagAnalyze}" Click="Scan_Click"/>
+			<AppBarButton x:Name="StopButton" Icon="Cancel" Label="{helpers:ResourceString Name=CleanTagStop}" IsEnabled="False" Click="Stop_Click"/>
+			<AppBarButton x:Name="UpButton" Icon="Up" Label="{helpers:ResourceString Name=CleanTagUp}" IsEnabled="False" Click="Up_Click"/>
+			<AppBarButton x:Name="TagButton" Icon="Tag" Label="{helpers:ResourceString Name=CleanTagTags}" IsEnabled="False" Click="Tags_Click"/>
+			<AppBarButton x:Name="BrowseButton" Icon="Folder" Label="{helpers:ResourceString Name=CleanTagBrowse}" IsEnabled="False" Click="Browse_Click"/>
+		</CommandBar>
+		<TextBox x:Name="RootPath" Grid.Row="1" PlaceholderText="{helpers:ResourceString Name=CleanTagChooseFolder}" AutomationProperties.Name="{helpers:ResourceString Name=CleanTagChooseFolder}"/>
+		<StackPanel Grid.Row="2" Spacing="4">
+			<TextBlock x:Name="Status" Text="{helpers:ResourceString Name=CleanTagChooseFolder}" TextWrapping="Wrap"/>
+			<ProgressBar x:Name="Progress" IsIndeterminate="False" Visibility="Collapsed"/>
+		</StackPanel>
+		<Grid Grid.Row="3">
+			<Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+			<ListView x:Name="Items" SelectionChanged="Items_SelectionChanged" DoubleTapped="Items_DoubleTapped" KeyDown="Items_KeyDown" AutomationProperties.Name="{helpers:ResourceString Name=CleanTagItems}"/>
+			<Button x:Name="MoreButton" Grid.Row="1" Content="{helpers:ResourceString Name=CleanTagMore}" Visibility="Collapsed" Click="More_Click"/>
+		</Grid>
+		<local:StorageTreemap x:Name="Map" Grid.Row="4"/>
+		<TextBlock x:Name="Details" Grid.Row="5" TextTrimming="CharacterEllipsis" MaxLines="2" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
+	</Grid>
+</UserControl>

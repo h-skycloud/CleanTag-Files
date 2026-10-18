@@ -1,4 +1,4 @@
-﻿// Copyright (c) Files Community
+// Copyright (c) Files Community
 // Licensed under the MIT License.
 
 using Windows.System;
@@ -54,7 +54,7 @@ namespace Files.App.Actions
 			{
 				var targetPath = (listedItem as IShortcutItem)?.TargetPath;
 				var selectedItemPath = !string.IsNullOrEmpty(targetPath) ? targetPath : listedItem.GetRequiredPath();
-				var folderUri = new Uri($"files-dev:?folder={@selectedItemPath}");
+				var folderUri = new Uri($"cleantag-experimental:?folder={@selectedItemPath}");
 
 				await Launcher.LaunchUriAsync(folderUri);
 			}

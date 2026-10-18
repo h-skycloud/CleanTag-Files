@@ -15,13 +15,13 @@
     IgnorableNamespaces="mp rescap desktop desktop4 desktop6 uap uap5 virtualization">
 
     <Identity
-        Name="FilesDev"
-        Publisher="CN=Files"
+        Name="CleanTag.Files.Experimental"
+        Publisher="CN=CleanTag"
         Version="4.3.0.0" />
 
     <Properties>
-        <DisplayName>Files - Dev</DisplayName>
-        <PublisherDisplayName>Yair A</PublisherDisplayName>
+        <DisplayName>CleanTag Experimental</DisplayName>
+        <PublisherDisplayName>CleanTag contributors</PublisherDisplayName>
         <Logo>Assets\AppTiles\Dev\StoreLogo.png</Logo>
         <desktop6:FileSystemWriteVirtualization>disabled</desktop6:FileSystemWriteVirtualization>
         <virtualization:RegistryWriteVirtualization>
@@ -95,7 +95,7 @@
             desktop4:SupportsMultipleInstances="true">
 
             <uap:VisualElements
-                DisplayName="Files - Dev"
+                DisplayName="CleanTag Experimental"
                 Description="Organize your files and folders easily. Robust multitasking experiences, helpful tags, and deep integrations add to an intuitive design, made by the community."
                 Square150x150Logo="Assets\AppTiles\Dev\Square150x150Logo.png"
                 Square44x44Logo="Assets\AppTiles\Dev\Square44x44Logo.png"
@@ -105,7 +105,7 @@
                     Wide310x150Logo="Assets\AppTiles\Dev\Wide310x150Logo.png"
                     Square71x71Logo="Assets\AppTiles\Dev\Small71x71Logo.png"
                     Square310x310Logo="Assets\AppTiles\Dev\Large310x310Logo.png"
-                    ShortName="Files - Dev">
+                    ShortName="CleanTag Experimental">
                     <uap:ShowNameOnTiles>
                         <uap:ShowOn Tile="square150x150Logo" />
                         <uap:ShowOn Tile="wide310x150Logo" />
@@ -126,14 +126,14 @@
                 </uap3:Extension>
 
                 <uap:Extension Category="windows.protocol">
-                    <!--  This value changes based on the build branch by CI (files-stable, files-preview, files-dev).  -->
-                    <uap:Protocol ReturnResults="none" Name="files-dev" />
+                    <!--  This value changes based on the build branch by CI (files-stable, files-preview, cleantag-experimental).  -->
+                    <uap:Protocol ReturnResults="none" Name="cleantag-experimental" />
                 </uap:Extension>
 
                 <uap5:Extension Category="windows.appExecutionAlias">
                     <uap5:AppExecutionAlias>
-                        <!--  This value changes based on the build branch by CI (files-stable, files-preview, files-dev).  -->
-                        <uap5:ExecutionAlias Alias="files-dev.exe" />
+                        <!--  This value changes based on the build branch by CI (files-stable, files-preview, cleantag-experimental).  -->
+                        <uap5:ExecutionAlias Alias="cleantag-experimental.exe" />
                     </uap5:AppExecutionAlias>
                 </uap5:Extension>
 

@@ -4740,4 +4740,24 @@
   <data name="ConfirmRemoveTagsDialogContent" xml:space="preserve">
     <value>Seçilen öğelerdeki etiketleri kaldırmak istediğinizden emin misiniz?</value>
   </data>
+  <data name="CleanTagAnalyze" xml:space="preserve"><value>Disk analizi</value></data>
+  <data name="CleanTagHome" xml:space="preserve"><value>Ana sayfa</value></data>
+  <data name="CleanTagChooseFolder" xml:space="preserve"><value>Analiz edilecek klasörü seçin</value></data>
+  <data name="CleanTagStop" xml:space="preserve"><value>Durdur</value></data>
+  <data name="CleanTagUp" xml:space="preserve"><value>Üst klasör</value></data>
+  <data name="CleanTagTags" xml:space="preserve"><value>Files etiketleri</value></data>
+  <data name="CleanTagItems" xml:space="preserve"><value>Mantıksal boyuta göre dosyalar ve klasörler</value></data>
+  <data name="CleanTagMore" xml:space="preserve"><value>Daha fazla göster</value></data>
+  <data name="CleanTagEmptyMap" xml:space="preserve"><value>Pozitif boyutlu dosya yok. Sıfır baytlı öğeler listede görünür.</value></data>
+  <data name="CleanTagMap" xml:space="preserve"><value>Disk haritası. Aynı öğelere listeden erişebilirsiniz.</value></data>
+  <data name="CleanTagSmallItems" xml:space="preserve"><value>Küçük öğeler</value></data>
+  <data name="CleanTagError" xml:space="preserve"><value>İşlem tamamlanamadı</value></data>
+  <data name="CleanTagPartial" xml:space="preserve"><value>İptal edildi — kısmi sonuç</value></data>
+  <data name="CleanTagComplete" xml:space="preserve"><value>Analiz tamamlandı</value></data>
+  <data name="CleanTagWarnings" xml:space="preserve"><value>uyarı</value></data>
+  <data name="CleanTagNewTag" xml:space="preserve"><value>Yeni etiket (isteğe bağlı)</value></data>
+  <data name="CleanTagSave" xml:space="preserve"><value>Kaydet</value></data>
+  <data name="CleanTagSaved" xml:space="preserve"><value>Etiketler Files sistemine kaydedildi</value></data>
+  <data name="CleanTagBrowse" xml:space="preserve"><value>Files içinde göz at</value></data>
+  <data name="CleanTagChanged" xml:space="preserve"><value>Öğe değişti. Etiketleri düzenlemeden önce yeniden tarayın.</value></data>
 </root>

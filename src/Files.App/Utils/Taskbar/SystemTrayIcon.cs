@@ -1,4 +1,4 @@
-﻿// Copyright (c) Files Community
+// Copyright (c) Files Community
 // Licensed under the MIT License.
 
 using Microsoft.Extensions.Logging;
@@ -296,7 +296,7 @@ namespace Files.App.Utils.Taskbar
 			{
 				_lastLaunchDate = DateTime.Now;
 
-				_ = Launcher.LaunchUriAsync(new Uri("files-dev:"));
+				_ = Launcher.LaunchUriAsync(new Uri("cleantag-experimental:"));
 			}
 			else
 				MainWindow.Instance.Activate();

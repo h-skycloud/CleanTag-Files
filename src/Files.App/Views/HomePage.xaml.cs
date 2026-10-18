@@ -29,6 +29,29 @@ namespace Files.App.Views
 			InitializeComponent();
 		}
 
+		private UserControls.CleanTag.CleanTagAnalysisView? cleanTagView;
+		private void OpenCleanTag_Click(object sender, RoutedEventArgs e)
+		{
+			cleanTagView = new();
+			cleanTagView.CloseRequested += CloseCleanTag;
+			cleanTagView.BrowseRequested += BrowseCleanTagFolder;
+			CleanTagHost.Content = cleanTagView;
+			CleanTagHost.Visibility = Visibility.Visible;
+			WidgetsScroll.Visibility = CleanTagToolbar.Visibility = Visibility.Collapsed;
+		}
+		private async void BrowseCleanTagFolder(string path)
+		{
+			CloseCleanTag();
+			await NavigationHelpers.OpenPath(path, AppInstance);
+		}
+		private void CloseCleanTag()
+		{
+			cleanTagView?.Dispose();
+			cleanTagView = null;
+			CleanTagHost.Content = null;
+			CleanTagHost.Visibility = Visibility.Collapsed;
+			WidgetsScroll.Visibility = CleanTagToolbar.Visibility = Visibility.Visible;
+		}
 		private void HomePage_Loaded(object sender, RoutedEventArgs e)
 		{
 			if (ViewModel.ReloadWidgetsCommand.CanExecute(e))
@@ -108,6 +131,7 @@ namespace Files.App.Views
 
 		public void Dispose()
 		{
+			CloseCleanTag();
 			ViewModel?.Dispose();
 		}
 	}
