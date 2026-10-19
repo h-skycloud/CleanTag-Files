@@ -66,6 +66,8 @@ Do not remove it while using a Visual Studio compiler older than that version.
   containing a test file through Gezinti. Verified both Recycle Bin metadata and
   payloads; the nested test file remained inside the recycled folder.
 - Canceling folder deletion preserved the item and queue position.
+- Gezinti settings and decision arrows were verified in the native UI, including
+  input/dialog guards, disabled shortcuts, sorting and persistence after restart.
 
 ## Remaining migration work
 

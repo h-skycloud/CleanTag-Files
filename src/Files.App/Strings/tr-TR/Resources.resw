@@ -4781,4 +4781,13 @@
   <data name="CleanTagReviewRecycledLogFailed" xml:space="preserve"><value>Öğe geri dönüşüm kutusuna taşındı ancak karar kaydedilemedi.</value></data>
   <data name="CleanTagReviewChooseFolder" xml:space="preserve"><value>Klasör seç</value></data>
   <data name="CleanTagReviewEmptyFolder" xml:space="preserve"><value>Bu klasör boş.</value></data>
+  <data name="CleanTagReviewSettings" xml:space="preserve"><value>Gezinti ayarları</value></data>
+  <data name="CleanTagReviewArrowKeys" xml:space="preserve"><value>Ok tuşlarıyla karar ver</value></data>
+  <data name="CleanTagReviewAskDelete" xml:space="preserve"><value>Silmeden önce onay iste</value></data>
+  <data name="CleanTagReviewSort" xml:space="preserve"><value>Gezinti sıralaması</value></data>
+  <data name="CleanTagReviewSortName" xml:space="preserve"><value>Ad (A–Z)</value></data>
+  <data name="CleanTagReviewSortSize" xml:space="preserve"><value>Büyük dosyalar önce</value></data>
+  <data name="CleanTagReviewSortDate" xml:space="preserve"><value>Yeni değiştirilenler önce</value></data>
+  <data name="CleanTagReviewShortcuts" xml:space="preserve"><value>← Sil   ·   → Tut   ·   ↓ Sonra</value></data>
+  <data name="CleanTagReviewRecycleInfo" xml:space="preserve"><value>Silinen öğeler Geri Dönüşüm Kutusu’na taşınır. Onay kapalıysa sol ok hemen siler.</value></data>
 </root>

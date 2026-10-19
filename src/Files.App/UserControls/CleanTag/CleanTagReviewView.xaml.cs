@@ -6,6 +6,9 @@ using Files.App.UserControls.FilePreviews;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Windows.System;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using IO = System.IO;
@@ -20,11 +23,84 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	private BasePreviewModel? previewModel;
 	private string root = "";
 	private bool busy, disposed;
+	private bool arrowKeysEnabled = true, confirmDelete = true, laterOnly;
+	private int sortOrder;
 	private int generation;
 	private CancellationTokenSource lifetime = new();
 	public event Action? CloseRequested;
 	public event Action<string>? BrowseRequested;
-	public CleanTagReviewView() => InitializeComponent();
+	public CleanTagReviewView()
+	{
+		InitializeComponent();
+		var preferences = ApplicationData.Current.LocalSettings.Values;
+		if (preferences.TryGetValue("CleanTag.Review.ArrowKeys", out var keys) && keys is bool enabled) arrowKeysEnabled = enabled;
+		if (preferences.TryGetValue("CleanTag.Review.ConfirmDelete", out var confirm) && confirm is bool ask) confirmDelete = ask;
+		if (preferences.TryGetValue("CleanTag.Review.Sort", out var order) && order is int index && index is >= 0 and <= 2) sortOrder = index;
+		UpdateShortcutHint();
+	}
+
+	internal async Task<bool> TryHandleDecisionKeyAsync(KeyRoutedEventArgs e)
+	{
+		if (e.Handled || disposed || !arrowKeysEnabled || session?.Current is null || !UIHelpers.CanShowDialog) return false;
+		ReviewDecision? decision = e.Key switch
+		{
+			VirtualKey.Left => ReviewDecision.Recycled,
+			VirtualKey.Right => ReviewDecision.Keep,
+			VirtualKey.Down => ReviewDecision.Later,
+			_ => null
+		};
+		if (decision is null || HotKeyHelpers.GetCurrentKeyModifiers() != KeyModifiers.None) return false;
+		if (NeedsOwnArrowKeys(e.OriginalSource as DependencyObject) || NeedsOwnArrowKeys(FocusManager.GetFocusedElement(XamlRoot) as DependencyObject)) return false;
+		e.Handled = true;
+		if (!busy && !e.KeyStatus.WasKeyDown) await DecideAsync(decision.Value);
+		return true;
+	}
+	private bool NeedsOwnArrowKeys(DependencyObject? element)
+	{
+		while (element is not null && element != this)
+		{
+			if (element is TextBox or PasswordBox or RichEditBox or AutoSuggestBox or ComboBox or Slider or RadioButton or
+				ToggleSwitch or ListViewBase or MediaPlayerElement or TextBlock { IsTextSelectionEnabled: true }) return true;
+			element = VisualTreeHelper.GetParent(element);
+		}
+		return false;
+	}
+	private void UpdateShortcutHint() => ShortcutHint.Visibility = arrowKeysEnabled ? Visibility.Visible : Visibility.Collapsed;
+	private async void Settings_Click(object sender, RoutedEventArgs e)
+	{
+		if (busy || disposed) return;
+		SetBusy(true);
+		bool reorder = false;
+		try
+		{
+			var arrows = new ToggleSwitch { Header = Strings.CleanTagReviewArrowKeys.GetLocalizedResource(), IsOn = arrowKeysEnabled };
+			var confirmation = new ToggleSwitch { Header = Strings.CleanTagReviewAskDelete.GetLocalizedResource(), IsOn = confirmDelete };
+			var sorting = new ComboBox { Header = Strings.CleanTagReviewSort.GetLocalizedResource(), HorizontalAlignment = HorizontalAlignment.Stretch,
+				ItemsSource = new[] { Strings.CleanTagReviewSortName.GetLocalizedResource(), Strings.CleanTagReviewSortSize.GetLocalizedResource(), Strings.CleanTagReviewSortDate.GetLocalizedResource() }, SelectedIndex = sortOrder };
+			var panel = new StackPanel { Spacing = 16 };
+			panel.Children.Add(arrows);
+			panel.Children.Add(new TextBlock { Text = Strings.CleanTagReviewShortcuts.GetLocalizedResource(), TextWrapping = TextWrapping.Wrap });
+			panel.Children.Add(confirmation);
+			panel.Children.Add(new TextBlock { Text = Strings.CleanTagReviewRecycleInfo.GetLocalizedResource(), TextWrapping = TextWrapping.Wrap });
+			panel.Children.Add(sorting);
+			var dialog = new ContentDialog { XamlRoot = XamlRoot, Title = Strings.CleanTagReviewSettings.GetLocalizedResource(),
+				Content = new ScrollViewer { Content = panel, MaxHeight = 420 }, PrimaryButtonText = Strings.CleanTagSave.GetLocalizedResource(),
+				CloseButtonText = Strings.Cancel.GetLocalizedResource(), DefaultButton = ContentDialogButton.Close };
+			if (await dialog.ShowAsync() != ContentDialogResult.Primary || disposed) return;
+			var preferences = ApplicationData.Current.LocalSettings.Values;
+			preferences["CleanTag.Review.ArrowKeys"] = arrows.IsOn;
+			preferences["CleanTag.Review.ConfirmDelete"] = confirmation.IsOn;
+			preferences["CleanTag.Review.Sort"] = sorting.SelectedIndex;
+			arrowKeysEnabled = arrows.IsOn;
+			confirmDelete = confirmation.IsOn;
+			reorder = sortOrder != sorting.SelectedIndex;
+			sortOrder = sorting.SelectedIndex;
+			UpdateShortcutHint();
+		}
+		catch (Exception ex) { Error(ex); }
+		finally { if (!disposed) SetBusy(false); }
+		if (reorder && !disposed && session is not null) await StartAsync(laterOnly);
+	}
 
 	private async void Choose_Click(object sender, RoutedEventArgs e)
 	{
@@ -51,7 +127,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	}
 	private async void Start_Click(object sender, RoutedEventArgs e) => await StartAsync(false);
 	private async void Deferred_Click(object sender, RoutedEventArgs e) => await StartAsync(true);
-	private async Task StartAsync(bool laterOnly)
+	private async Task StartAsync(bool deferredOnly)
 	{
 		if (busy || disposed) return;
 		if (Mode.SelectedIndex < 0 || string.IsNullOrWhiteSpace(RootPath.Text))
@@ -65,6 +141,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 		try
 		{
 			root = IO.Path.TrimEndingDirectorySeparator(IO.Path.GetFullPath(RootPath.Text));
+			laterOnly = deferredOnly;
 			bool folders = Mode.SelectedIndex == 1;
 			Message(Strings.CleanTagReviewLoading.GetLocalizedResource());
 			records = await store.LoadAsync(lifetime.Token);
@@ -80,7 +157,12 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 					result.Add(new(item.FullName, folders ? 0 : ((IO.FileInfo)item).Length, item.LastWriteTimeUtc.Ticks)
 					{ IsDirectory = folders, NativeId = FileTagsHelper.GetFileFRN(item.FullName)?.ToString() });
 				}
-				return result.OrderBy(item => item.Name, StringComparer.CurrentCultureIgnoreCase).ToArray();
+				return (sortOrder switch
+				{
+					1 => result.OrderByDescending(item => item.Size).ThenBy(item => item.Name, StringComparer.CurrentCultureIgnoreCase),
+					2 => result.OrderByDescending(item => item.ModifiedTicks).ThenBy(item => item.Name, StringComparer.CurrentCultureIgnoreCase),
+					_ => result.OrderBy(item => item.Name, StringComparer.CurrentCultureIgnoreCase)
+				}).ToArray();
 			}, lifetime.Token);
 			if (disposed || generation != version) return;
 			session = new(root, entries, records, laterOnly);
@@ -162,12 +244,15 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 			ReviewSafety.Validate(root, item, FileTagsHelper.GetFileFRN(item.FullPath)?.ToString());
 			if (decision == ReviewDecision.Recycled)
 			{
+				if (confirmDelete)
+				{
 				var confirmation = new ContentDialog { XamlRoot = XamlRoot,
 					Title = Strings.CleanTagReviewDelete.GetLocalizedResource(),
 					Content = string.Format((item.IsDirectory ? Strings.CleanTagReviewDeleteFolder : Strings.CleanTagReviewDeleteFile).GetLocalizedResource(), item.FullPath),
 					PrimaryButtonText = Strings.CleanTagReviewDelete.GetLocalizedResource(), CloseButtonText = Strings.Cancel.GetLocalizedResource(),
 					DefaultButton = ContentDialogButton.Close };
 				if (await confirmation.ShowAsync() != ContentDialogResult.Primary || disposed) return;
+				}
 				ClearPreview();
 				recycled = await FileOperationsHelpers.RecycleReviewItemAsync(root, item, MainWindow.Instance.WindowHandle);
 				if (!recycled) throw new IO.IOException(Strings.CleanTagReviewRecycleFailed.GetLocalizedResource());
@@ -207,8 +292,9 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	private void SetBusy(bool value)
 	{
 		busy = value;
-		ChooseButton.IsEnabled = RefreshButton.IsEnabled = DeferredButton.IsEnabled = RootPath.IsEnabled = Mode.IsEnabled = !value;
+		ChooseButton.IsEnabled = RefreshButton.IsEnabled = DeferredButton.IsEnabled = SettingsButton.IsEnabled = RootPath.IsEnabled = Mode.IsEnabled = !value;
 		Decisions.IsEnabled = !value && session?.Current is not null;
+		if (!value && session?.Current is not null) Focus(FocusState.Programmatic);
 	}
 	private void Message(string message, InfoBarSeverity severity = InfoBarSeverity.Informational) { Status.Message = message; Status.Severity = severity; }
 	private void Error(Exception ex) { App.Logger.LogError(ex, "CleanTag review failed"); if (!disposed) Message(Strings.CleanTagError.GetLocalizedResource() + ": " + ex.Message, InfoBarSeverity.Error); }

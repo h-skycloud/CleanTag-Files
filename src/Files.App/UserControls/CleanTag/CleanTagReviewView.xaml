@@ -1,7 +1,7 @@
 <UserControl x:Class="Files.App.UserControls.CleanTag.CleanTagReviewView"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:helpers="using:Files.App.Helpers" Unloaded="View_Unloaded">
+	xmlns:helpers="using:Files.App.Helpers" IsTabStop="True" Unloaded="View_Unloaded">
 	<Grid Padding="16" RowSpacing="12" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
 		<CommandBar DefaultLabelPosition="Right">
@@ -10,6 +10,7 @@
 			<AppBarButton x:Name="ChooseButton" Icon="OpenFile" Label="{helpers:ResourceString Name=CleanTagReviewChooseFolder}" Click="Choose_Click"/>
 			<AppBarButton x:Name="RefreshButton" Icon="Refresh" Label="{helpers:ResourceString Name=CleanTagReviewStart}" Click="Start_Click"/>
 			<AppBarButton x:Name="DeferredButton" Icon="Clock" Label="{helpers:ResourceString Name=CleanTagReviewDeferred}" Click="Deferred_Click"/>
+			<AppBarButton x:Name="SettingsButton" Icon="Setting" Label="{helpers:ResourceString Name=CleanTagReviewSettings}" Click="Settings_Click"/>
 		</CommandBar>
 		<TextBox x:Name="RootPath" Grid.Row="1" PlaceholderText="{helpers:ResourceString Name=CleanTagReviewChooseFolder}" AutomationProperties.Name="{helpers:ResourceString Name=CleanTagReviewChooseFolder}"/>
 		<RadioButtons x:Name="Mode" Grid.Row="2" Header="{helpers:ResourceString Name=CleanTagReviewMode}" MaxColumns="2" SelectionChanged="Mode_SelectionChanged">
@@ -23,7 +24,9 @@
 			<TextBlock x:Name="ItemDetails" Grid.Row="1" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
 			<ContentControl x:Name="Preview" Grid.Row="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
 		</Grid>
-		<CommandBar x:Name="Decisions" Grid.Row="5" IsEnabled="False" DefaultLabelPosition="Right">
+		<StackPanel Grid.Row="5" Spacing="4">
+		<TextBlock x:Name="ShortcutHint" Text="{helpers:ResourceString Name=CleanTagReviewShortcuts}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center"/>
+		<CommandBar x:Name="Decisions" IsEnabled="False" DefaultLabelPosition="Right">
 			<CommandBar.PrimaryCommands>
 				<AppBarButton Icon="Delete" Label="{helpers:ResourceString Name=CleanTagReviewDelete}" Click="Delete_Click"/>
 				<AppBarButton Icon="Accept" Label="{helpers:ResourceString Name=CleanTagReviewKeep}" Click="Keep_Click"/>
@@ -33,5 +36,6 @@
 				<AppBarButton Icon="Folder" Label="{helpers:ResourceString Name=CleanTagBrowse}" Click="Browse_Click"/>
 			</CommandBar.PrimaryCommands>
 		</CommandBar>
+		</StackPanel>
 	</Grid>
 </UserControl>

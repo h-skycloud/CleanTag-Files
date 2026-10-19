@@ -267,6 +267,10 @@ namespace Files.App.Views
 		{
 			base.OnPreviewKeyDown(e);
 
+			// Gezinti owns its decision arrows before the shell's configurable hotkeys.
+			var review = (e.OriginalSource as DependencyObject)?.FindAscendantOrSelf<UserControls.CleanTag.CleanTagReviewView>();
+			if (review is not null && await review.TryHandleDecisionKeyAsync(e)) return;
+
 			switch (e.Key)
 			{
 				case VirtualKey.Menu:

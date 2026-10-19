@@ -4784,4 +4784,13 @@
   <data name="CleanTagReviewRecycledLogFailed" xml:space="preserve"><value>The item was recycled, but its decision could not be saved.</value></data>
   <data name="CleanTagReviewChooseFolder" xml:space="preserve"><value>Choose folder</value></data>
   <data name="CleanTagReviewEmptyFolder" xml:space="preserve"><value>This folder is empty.</value></data>
+  <data name="CleanTagReviewSettings" xml:space="preserve"><value>Review settings</value></data>
+  <data name="CleanTagReviewArrowKeys" xml:space="preserve"><value>Use arrow keys for decisions</value></data>
+  <data name="CleanTagReviewAskDelete" xml:space="preserve"><value>Confirm before recycling</value></data>
+  <data name="CleanTagReviewSort" xml:space="preserve"><value>Review order</value></data>
+  <data name="CleanTagReviewSortName" xml:space="preserve"><value>Name (A–Z)</value></data>
+  <data name="CleanTagReviewSortSize" xml:space="preserve"><value>Largest files first</value></data>
+  <data name="CleanTagReviewSortDate" xml:space="preserve"><value>Newest modified first</value></data>
+  <data name="CleanTagReviewShortcuts" xml:space="preserve"><value>← Recycle   ·   → Keep   ·   ↓ Later</value></data>
+  <data name="CleanTagReviewRecycleInfo" xml:space="preserve"><value>Deleted items go to the Recycle Bin. With confirmation disabled, Left recycles immediately.</value></data>
 </root>
