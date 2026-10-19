@@ -4760,4 +4760,25 @@
   <data name="CleanTagSaved" xml:space="preserve"><value>Etiketler Files sistemine kaydedildi</value></data>
   <data name="CleanTagBrowse" xml:space="preserve"><value>Files içinde göz at</value></data>
   <data name="CleanTagChanged" xml:space="preserve"><value>Öğe değişti. Etiketleri düzenlemeden önce yeniden tarayın.</value></data>
+  <data name="CleanTagReview" xml:space="preserve"><value>Gezinti</value></data>
+  <data name="CleanTagReviewStart" xml:space="preserve"><value>Başlat / yenile</value></data>
+  <data name="CleanTagReviewDeferred" xml:space="preserve"><value>Sonrakiler</value></data>
+  <data name="CleanTagReviewMode" xml:space="preserve"><value>Neyi gözden geçirmek istiyorsunuz?</value></data>
+  <data name="CleanTagReviewFiles" xml:space="preserve"><value>1 — Dosya</value></data>
+  <data name="CleanTagReviewFolders" xml:space="preserve"><value>2 — Klasör</value></data>
+  <data name="CleanTagReviewIntro" xml:space="preserve"><value>Bir klasör seçin, ardından Dosya veya Klasör modunu seçin.</value></data>
+  <data name="CleanTagReviewLoading" xml:space="preserve"><value>Klasör içeriği hazırlanıyor…</value></data>
+  <data name="CleanTagReviewDelete" xml:space="preserve"><value>Sil</value></data>
+  <data name="CleanTagReviewKeep" xml:space="preserve"><value>Tut</value></data>
+  <data name="CleanTagReviewLater" xml:space="preserve"><value>Sonra</value></data>
+  <data name="CleanTagReviewDone" xml:space="preserve"><value>Gezinti tamamlandı</value></data>
+  <data name="CleanTagReviewDoneHint" xml:space="preserve"><value>Bu modda bekleyen öğe kalmadı. Ertelediklerinize Sonrakiler düğmesinden dönebilirsiniz.</value></data>
+  <data name="CleanTagReviewRemaining" xml:space="preserve"><value>{0} öğe kaldı · Seçilen klasörün doğrudan içeriği</value></data>
+  <data name="CleanTagReviewMore" xml:space="preserve"><value>Diğer öğeleri Files içinde göz at ile görebilirsiniz.</value></data>
+  <data name="CleanTagReviewDeleteFolder" xml:space="preserve"><value>Bu klasör ve TÜM İÇERİĞİ geri dönüşüm kutusuna taşınsın mı?  {0}</value></data>
+  <data name="CleanTagReviewDeleteFile" xml:space="preserve"><value>Bu dosya geri dönüşüm kutusuna taşınsın mı?  {0}</value></data>
+  <data name="CleanTagReviewRecycleFailed" xml:space="preserve"><value>Öğe geri dönüşüm kutusuna taşınamadı. Gezinti sırasında tutuldu.</value></data>
+  <data name="CleanTagReviewRecycledLogFailed" xml:space="preserve"><value>Öğe geri dönüşüm kutusuna taşındı ancak karar kaydedilemedi.</value></data>
+  <data name="CleanTagReviewChooseFolder" xml:space="preserve"><value>Klasör seç</value></data>
+  <data name="CleanTagReviewEmptyFolder" xml:space="preserve"><value>Bu klasör boş.</value></data>
 </root>

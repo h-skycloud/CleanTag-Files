@@ -31,6 +31,34 @@ try
 	var absent = await scanner.ScanAsync(Path.Combine(root, "missing"), new(), null, default);
 	Check(absent.Status == StorageScanStatus.Failed && absent.IssueCount > 0, "Missing root is reported");
 	Check(Directory.GetFiles(root, "*", SearchOption.AllDirectories).Length == 3, "Scan creates no catalog or sidecars");
+	var first = new FileEntry(Path.Combine(root, "one.txt"), 1024, File.GetLastWriteTimeUtc(Path.Combine(root, "one.txt")).Ticks) { NativeId = "test-1" };
+	var second = new FileEntry(Path.Combine(root, "zero"), 0, File.GetLastWriteTimeUtc(Path.Combine(root, "zero")).Ticks) { NativeId = "test-2" };
+	var folder = new FileEntry(Path.Combine(root, "nested"), 0, Directory.GetLastWriteTimeUtc(Path.Combine(root, "nested")).Ticks) { IsDirectory = true, NativeId = "test-3" };
+	var history = new List<ReviewRecord> { new(root, first, ReviewDecision.Keep), new(root, second, ReviewDecision.Later) };
+	Check(new ReviewSession(root, [first, second], history, false).Remaining == 0, "Keep and Later are not repeated in pending queue");
+	var later = new ReviewSession(root, [first, second], history, true);
+	Check(later.Remaining == 1 && later.Current == second, "Deferred items have their own queue");
+	later.Advance(); Check(later.Current is null && later.Remaining == 0, "Queue advances exactly once");
+	Check(new ReviewSession(root, [first with { NativeId = "replacement" }], history, false).Remaining == 1, "Replacement is reviewed again");
+	Check(new ReviewSession(root + "other", [first], history, false).Remaining == 1, "Decisions are scoped to chosen root");
+	ReviewSafety.Validate(root, first, "test-1");
+	ReviewSafety.Validate(root, folder, "test-3");
+	Check(true, "File and folder revision validation");
+	bool denied = false;
+	try { ReviewSafety.Validate(root, first, "replaced"); } catch (IOException) { denied = true; }
+	Check(denied, "Identity replacement blocks recycling");
+	denied = false;
+	try { ReviewSafety.Validate(root, first with { FullPath = Path.Combine(root, "nested", "two.bin") }, "test-1"); } catch (IOException) { denied = true; }
+	Check(denied, "Out-of-scope descendant blocks recycling");
+	var store = new ReviewDecisionStore(Path.Combine(root, "decisions.json"));
+	await store.SaveAsync(history);
+	var loaded = await store.LoadAsync();
+	Check(loaded.Count == 2 && loaded[0].Entry.NativeId == "test-1" && loaded[0].Decision == ReviewDecision.Keep, "Decision persistence survives reload");
+	await Task.WhenAll(store.RecordAsync(new(root, first, ReviewDecision.Later)),
+		new ReviewDecisionStore(Path.Combine(root, "decisions.json")).RecordAsync(new(root, folder, ReviewDecision.Keep)));
+	loaded = await store.LoadAsync();
+	Check(loaded.Count == 3 && loaded.Single(record => record.Entry.FullPath == first.FullPath).Decision == ReviewDecision.Later,
+		"Concurrent review windows merge records without losing decisions");
 	Console.WriteLine($"PASS: {checks} analysis integration checks");
 }
 finally

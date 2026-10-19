@@ -6,6 +6,8 @@ This is an experimental migration branch, not a replacement for released CleanTa
 ## Included
 
 - Native disk analysis from the Files Home page, in the same window.
+- **Gezinti** on Home: choose a folder and Files/Folders mode, preview one item at
+  a time, tag it, then Keep, Later or Recycle. See `CLEANTAG-GEZINTI.md`.
 - CleanTag's read-only hierarchical scanner, cancellation and bounded Win2D map.
 - Folder drill-down, parent navigation, paged size-sorted entries and keyboard
   Enter navigation. Zero-byte entries remain available in the list.
@@ -45,7 +47,8 @@ Do not remove it while using a Visual Studio compiler older than that version.
 ## Verification
 
 - x64 Debug build and development package registration succeeded.
-- Ten analysis checks passed: totals, hierarchy, extensions, treemap area and byte
+- Twenty checks passed: review queue decisions, persistence, revision safety and
+  concurrent-window merging, plus totals, hierarchy, extensions, treemap area and byte
   conservation, hit testing, non-mutating filters, cancellation, missing roots and
   absence of catalog/sidecar writes.
 - Startup was verified after fixing the incomplete development asset layout.
@@ -57,14 +60,18 @@ Do not remove it while using a Visual Studio compiler older than that version.
   Files browser after navigating from analysis.
 - Final native window remained open and responsive. These checks were on the
   local development package, not a signed public release or clean machine.
-- UI deletion was not exercised; this integration does not add a deletion path.
+- Gezinti UI verified file preview, Keep/Later progression, deferred queue,
+  tagging without advancing, restart persistence and separate folder mode.
+- With explicit user approval, recycled one disposable file and one folder
+  containing a test file through Gezinti. Verified both Recycle Bin metadata and
+  payloads; the nested test file remained inside the recycled folder.
+- Canceling folder deletion preserved the item and queue position.
 
 ## Remaining migration work
 
-The original CleanTag inbox/review workflow, legacy catalog import, advanced
-analysis filtering, full product branding and public distribution are not part of
-this experiment yet. Files already owns the browser, preview, tag management,
-properties and recycle workflows; subsequent work should use those facilities.
+Legacy catalog import, advanced analysis filtering, full product branding and
+public distribution remain migration work. Gezinti now supplies the review
+workflow using Files previews, tags and native shell operations.
 
 Retain upstream `LICENSE-MIT` and `LICENSE-MPL`. The extracted analysis module
 retains its CleanTag MIT license in `src/CleanTag.Analysis/LICENSE`.

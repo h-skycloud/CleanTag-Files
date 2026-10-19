@@ -418,6 +418,7 @@
 	<Grid>
 		<Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
 		<CommandBar x:Name="CleanTagToolbar" DefaultLabelPosition="Right">
+			<AppBarButton Icon="View" Label="{helpers:ResourceString Name=CleanTagReview}" Click="OpenReview_Click"/>
 			<AppBarButton Icon="MapDrive" Label="{helpers:ResourceString Name=CleanTagAnalyze}" Click="OpenCleanTag_Click"/>
 		</CommandBar>
 		<ContentControl x:Name="CleanTagHost" Grid.RowSpan="2" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Visibility="Collapsed"/>

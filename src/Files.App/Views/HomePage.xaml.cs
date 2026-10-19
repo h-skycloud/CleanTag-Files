@@ -30,6 +30,16 @@ namespace Files.App.Views
 		}
 
 		private UserControls.CleanTag.CleanTagAnalysisView? cleanTagView;
+		private UserControls.CleanTag.CleanTagReviewView? reviewView;
+		private void OpenReview_Click(object sender, RoutedEventArgs e)
+		{
+			reviewView = new();
+			reviewView.CloseRequested += CloseCleanTag;
+			reviewView.BrowseRequested += BrowseCleanTagFolder;
+			CleanTagHost.Content = reviewView;
+			CleanTagHost.Visibility = Visibility.Visible;
+			WidgetsScroll.Visibility = CleanTagToolbar.Visibility = Visibility.Collapsed;
+		}
 		private void OpenCleanTag_Click(object sender, RoutedEventArgs e)
 		{
 			cleanTagView = new();
@@ -46,6 +56,8 @@ namespace Files.App.Views
 		}
 		private void CloseCleanTag()
 		{
+			reviewView?.Dispose();
+			reviewView = null;
 			cleanTagView?.Dispose();
 			cleanTagView = null;
 			CleanTagHost.Content = null;
