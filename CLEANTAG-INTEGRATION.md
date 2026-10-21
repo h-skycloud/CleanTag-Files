@@ -1,7 +1,8 @@
-# CleanTag experimental integration
+# CleanTag Files integration
 
 Based on Files Community commit `6b721e819e4006670c5926325450fef9157aa6b4`.
-This is an experimental migration branch, not a replacement for released CleanTag.
+This Files-based edition is the primary CleanTag product. Standalone CleanTag
+remains a separate lightweight application with its own SQLite catalog.
 
 ## Included
 
@@ -32,7 +33,7 @@ Use Windows with Visual Studio C++ and Windows application development component
 dotnet run --project tests/CleanTag.Analysis.Checks/CleanTag.Analysis.Checks.csproj -p:Platform=x64
 ```
 
-Open **CleanTag Experimental** from Start. Select **Disk analysis** on Home, then
+Open **CleanTag Files** from Start. Select **Disk analysis** on Home, then
 choose a test folder. Double-click a folder or press Enter to drill down. Select
 a file or folder and use **Files tags** to edit its tags.
 
@@ -47,7 +48,7 @@ Do not remove it while using a Visual Studio compiler older than that version.
 ## Verification
 
 - x64 Debug build and development package registration succeeded.
-- Twenty checks passed: review queue decisions, persistence, revision safety and
+- Twenty-six checks passed: bounded document preview parsing, review queue decisions, persistence, revision safety and
   concurrent-window merging, plus totals, hierarchy, extensions, treemap area and byte
   conservation, hit testing, non-mutating filters, cancellation, missing roots and
   absence of catalog/sidecar writes.
@@ -69,11 +70,17 @@ Do not remove it while using a Visual Studio compiler older than that version.
 - Gezinti settings and decision arrows were verified in the native UI, including
   input/dialog guards, disabled shortcuts, sorting and persistence after restart.
 
-## Remaining migration work
+## Scope and distribution
 
-Legacy catalog import, advanced analysis filtering, full product branding and
-public distribution remain migration work. Gezinti now supplies the review
-workflow using Files previews, tags and native shell operations.
+Legacy SQLite import and automatic synchronization are outside this release.
+Gezinti supplies the review workflow using Files previews, tags and native shell
+operations, with a persistent tag inspector in wide windows. Global tag deletion
+awaits ADS updates and refreshes the index; a failed update retains the definition
+so it can be retried. Unavailable items can prevent global deletion.
+
+See the root README for the unsigned developer distribution, backup procedure,
+versioned installation and current preview limits. Public signing and automatic
+updates are not configured.
 
 Retain upstream `LICENSE-MIT` and `LICENSE-MPL`. The extracted analysis module
 retains its CleanTag MIT license in `src/CleanTag.Analysis/LICENSE`.

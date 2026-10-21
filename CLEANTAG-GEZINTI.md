@@ -24,14 +24,30 @@ preferences. Arrow keys default to enabled: **Left = Recycle**, **Right = Keep**
 disabled, Left recycles immediately. The Recycle Bin-only behavior is unchanged.
 The active shortcut mapping is shown above the decision buttons.
 
-Gezinti receives these arrows before Files' general hotkeys. Editable text,
-selection controls, media controls, dialogs and modified key combinations retain
-their normal keyboard behavior. Holding an arrow does not process repeated items.
-After loading an item or completing an action, keyboard focus returns to Gezinti.
+Gezinti receives decision arrows before Files hotkeys, including when its contents
+list, image, document or view buttons have focus. Editable inputs, mode/settings
+controls, media controls, dialogs and modified key combinations retain their normal
+keyboard behavior. Holding an arrow does not process repeated items. Clicking
+**Use arrow keys to decide** enables the preference and restores decision focus.
+The Files pointer workaround no longer moves focus out of Gezinti.
 
-File previews reuse Files' image, media, text, shell-handler and basic preview
-controls. Folder previews show up to 100 immediate child names without recursively
-scanning the folder. Preview resources are released when advancing or recycling.
+File previews reuse Files image, media, text, shell-handler and basic controls.
+PDF and PDF-compatible AI documents use the Windows PDF renderer, one page at a
+time, with explicit paging buttons. PSD/PSB embedded JPEG resources and binary EPS
+TIFF previews are read with bounded lengths; Windows thumbnails and registered
+handlers provide fallbacks. A design file without a compatible embedded preview
+or provider displays an explicit unavailable message. ZIP, 7z, RAR, TAR, GZ and
+other supported archive formats list up to 300 entry names and sizes using Files
+7-Zip backend. Nothing is extracted. Encrypted headers, damaged archives and
+unsupported formats display a failure message. The same document/archive preview
+is available in the ordinary Files preview pane. Document loads are cancellable
+and do not disable review decisions; recycling waits for preview handles to close. Folder previews offer thumbnail and details layouts, with the last
+layout remembered. They show up to 100 available immediate children, folders
+first, with names, type/size, modified dates and native icons. Image thumbnails
+load one at a time without blocking decisions. A visible scope note makes clear
+that review actions apply to the whole current folder; the preview does not
+recursively scan or total its contents. Offline, system and reparse children are
+excluded. Preview work is canceled and resources released when advancing.
 
 Decisions are stored in the development package's private local data as
 `cleantag-review.json`. A file lock merges decisions across concurrent windows;
@@ -55,3 +71,28 @@ Left opening the confirmation dialog followed by cancellation, disabled shortcut
 normal arrow behavior in the path textbox and dialog controls, size sorting, and
 preference restoration after restarting the application. Final preferences were
 restored to arrow keys enabled, confirmation enabled and name sorting.
+
+Folder UI verification: native thumbnail/details switching, real image thumbnails
+from generated test images, folder/file icons, sizes and modified dates, empty
+folders, and a 105-file fixture with a visible 100-item limit were exercised.
+The details layout was restored after restarting. The earlier contents-list navigation behavior has been superseded by decision
+arrows when review shortcuts are enabled.
+
+The earlier folder-view key guards were superseded by decision arrows taking
+precedence in review content when shortcuts are enabled. Use the visible decision
+focus button to enable shortcuts again after turning them off in settings.
+
+Verified on 2026-10-22: 26 automated analysis/preview checks and a successful
+x64 Debug packaged build/launch. Native UI verification covered PDF and
+PDF-compatible AI first/second pages, PSD embedded images, ZIP entry names and
+sizes, a corrupt ZIP failure message, and the same PDF/PSD/ZIP content in the
+ordinary Files preview pane. Archive paths, including a parent-relative test name,
+were only displayed; no entries were extracted.
+
+Right/Keep worked from document page controls. Down/Later worked from the archive
+entry list. Left opened deletion confirmation; Down in that dialog did not
+advance the queue, and Escape preserved the item. Right worked after cancellation.
+Disabled shortcuts did not advance; the decision-focus button re-enabled them.
+Left in the root-path textbox retained editing behavior. No actual deletion was
+performed during this verification. The existing confirmation-off and size-sort
+preferences were restored, with decision shortcuts enabled.

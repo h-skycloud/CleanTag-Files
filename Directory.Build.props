@@ -10,6 +10,7 @@
     <WindowsTargetFramework>$(TargetFrameworkVersion)-windows$(TargetWindowsVersion)</WindowsTargetFramework>
     <LangVersion>preview</LangVersion>
     <WarningsAsErrors>nullable</WarningsAsErrors>
+    <PathMap Condition="'$(Configuration)' == 'Release'">$(MSBuildThisFileDirectory)=/_/CleanTagFiles/</PathMap>
 
     <!--  Use Microsoft.Testing.Platform  -->
     <EnableMSTestRunner>true</EnableMSTestRunner>

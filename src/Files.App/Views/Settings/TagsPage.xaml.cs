@@ -102,9 +102,23 @@ namespace Files.App.Views.Settings
 		}
 
 		[DynamicWindowsRuntimeCast(typeof(Button))]
-		private void RemoveTag_Click(object sender, RoutedEventArgs e)
+		private async void RemoveTag_Click(object sender, RoutedEventArgs e)
 		{
-			ViewModel.DeleteExistingTag((ListedTagViewModel)((Button)sender).DataContext);
+			if (!IsEnabled) return;
+			IsEnabled = false;
+			deleteItemFlyout?.Hide();
+			try
+			{
+				if (!await ViewModel.DeleteExistingTagAsync((ListedTagViewModel)((Button)sender).DataContext))
+					await new ContentDialog
+					{
+						XamlRoot = XamlRoot,
+						Title = Strings.ErrorApplyingTagTitle.GetLocalizedResource(),
+						Content = Strings.CleanTagTagDeleteFailed.GetLocalizedResource(),
+						CloseButtonText = "Ok".GetLocalizedResource()
+					}.TryShowAsync();
+			}
+			finally { IsEnabled = true; }
 		}
 
 		[DynamicWindowsRuntimeCast(typeof(TextBox))]

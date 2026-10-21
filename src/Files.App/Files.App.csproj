@@ -1,4 +1,4 @@
-﻿<!--  Copyright (c) Files Community. Licensed under the MIT License.  -->
+<!--  Copyright (c) Files Community. Licensed under the MIT License.  -->
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -34,7 +34,7 @@
         <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
         <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
         <PublishReadyToRunComposite Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRunComposite>
-        <ApplicationIcon>Assets\AppTiles\Dev\Logo.ico</ApplicationIcon>
+        <ApplicationIcon>Assets\CleanTag\AppIcon.ico</ApplicationIcon>
         <IsTrimmable>true</IsTrimmable>
         <IsAotCompatible>true</IsAotCompatible>
         <IlcGenerateMstatFile>true</IlcGenerateMstatFile>
@@ -44,12 +44,6 @@
 
     <PropertyGroup>
         <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(SENTRY_AUTH_TOKEN)' != ''">
-        <SentryOrg>files-org</SentryOrg>
-        <SentryProject>files-app</SentryProject>
-        <SentryUploadSymbols>true</SentryUploadSymbols>
     </PropertyGroup>
 
     <ItemGroup>
@@ -123,7 +117,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" />
         <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
         <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" />
-        <PackageReference Include="Sentry" />
+        <PackageReference Include="Sentry" ExcludeAssets="build;buildTransitive" />
         <PackageReference Include="SevenZipSharp" />
         <PackageReference Include="SharpZipLib" />
         <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" />

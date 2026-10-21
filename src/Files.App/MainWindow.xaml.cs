@@ -35,7 +35,7 @@ namespace Files.App
 			InitializeComponent();
 
 			ExtendsContentIntoTitleBar = true;
-			Title = "Files";
+			Title = "CleanTag Files";
 			AppWindow.TitleBar.ButtonBackgroundColor = Colors.Transparent;
 			AppWindow.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
 			AppWindow.TitleBar.ButtonPressedBackgroundColor = Colors.Transparent;

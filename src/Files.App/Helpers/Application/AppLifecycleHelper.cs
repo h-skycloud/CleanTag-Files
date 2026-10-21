@@ -88,13 +88,7 @@ namespace Files.App.Helpers
 		/// </summary>
 		public static string AppIconPath => _appIconPath.Value;
 
-		private static readonly Lazy<string> _appIconPath = new(() =>
-			SystemIO.Path.Combine(Package.Current.InstalledPath, AppEnvironment switch
-			{
-				AppEnvironment.Dev => Constants.AssetPaths.DevLogo,
-				AppEnvironment.SideloadPreview or AppEnvironment.StorePreview => Constants.AssetPaths.PreviewLogo,
-				_ => Constants.AssetPaths.StableLogo
-			}));
+		private static readonly Lazy<string> _appIconPath = new(() => SystemIO.Path.Combine(Package.Current.InstalledPath, @"Assets\CleanTag\AppIcon.ico"));
 
 		/// <summary>
 		/// Initializes the app components.

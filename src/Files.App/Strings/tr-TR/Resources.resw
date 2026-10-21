@@ -4745,7 +4745,7 @@
   <data name="CleanTagChooseFolder" xml:space="preserve"><value>Analiz edilecek klasörü seçin</value></data>
   <data name="CleanTagStop" xml:space="preserve"><value>Durdur</value></data>
   <data name="CleanTagUp" xml:space="preserve"><value>Üst klasör</value></data>
-  <data name="CleanTagTags" xml:space="preserve"><value>Files etiketleri</value></data>
+  <data name="CleanTagTags" xml:space="preserve"><value>Etiketleri düzenle</value></data>
   <data name="CleanTagItems" xml:space="preserve"><value>Mantıksal boyuta göre dosyalar ve klasörler</value></data>
   <data name="CleanTagMore" xml:space="preserve"><value>Daha fazla göster</value></data>
   <data name="CleanTagEmptyMap" xml:space="preserve"><value>Pozitif boyutlu dosya yok. Sıfır baytlı öğeler listede görünür.</value></data>
@@ -4755,17 +4755,17 @@
   <data name="CleanTagPartial" xml:space="preserve"><value>İptal edildi — kısmi sonuç</value></data>
   <data name="CleanTagComplete" xml:space="preserve"><value>Analiz tamamlandı</value></data>
   <data name="CleanTagWarnings" xml:space="preserve"><value>uyarı</value></data>
-  <data name="CleanTagNewTag" xml:space="preserve"><value>Yeni etiket (isteğe bağlı)</value></data>
+  <data name="CleanTagNewTag" xml:space="preserve"><value>Yeni etiket adı</value></data>
   <data name="CleanTagSave" xml:space="preserve"><value>Kaydet</value></data>
   <data name="CleanTagSaved" xml:space="preserve"><value>Etiketler Files sistemine kaydedildi</value></data>
-  <data name="CleanTagBrowse" xml:space="preserve"><value>Files içinde göz at</value></data>
+  <data name="CleanTagBrowse" xml:space="preserve"><value>Dosya yöneticisinde aç</value></data>
   <data name="CleanTagChanged" xml:space="preserve"><value>Öğe değişti. Etiketleri düzenlemeden önce yeniden tarayın.</value></data>
   <data name="CleanTagReview" xml:space="preserve"><value>Gezinti</value></data>
   <data name="CleanTagReviewStart" xml:space="preserve"><value>Başlat / yenile</value></data>
   <data name="CleanTagReviewDeferred" xml:space="preserve"><value>Sonrakiler</value></data>
   <data name="CleanTagReviewMode" xml:space="preserve"><value>Neyi gözden geçirmek istiyorsunuz?</value></data>
-  <data name="CleanTagReviewFiles" xml:space="preserve"><value>1 — Dosya</value></data>
-  <data name="CleanTagReviewFolders" xml:space="preserve"><value>2 — Klasör</value></data>
+  <data name="CleanTagReviewFiles" xml:space="preserve"><value>Dosyalar</value></data>
+  <data name="CleanTagReviewFolders" xml:space="preserve"><value>Klasörler</value></data>
   <data name="CleanTagReviewIntro" xml:space="preserve"><value>Bir klasör seçin, ardından Dosya veya Klasör modunu seçin.</value></data>
   <data name="CleanTagReviewLoading" xml:space="preserve"><value>Klasör içeriği hazırlanıyor…</value></data>
   <data name="CleanTagReviewDelete" xml:space="preserve"><value>Sil</value></data>
@@ -4790,4 +4790,30 @@
   <data name="CleanTagReviewSortDate" xml:space="preserve"><value>Yeni değiştirilenler önce</value></data>
   <data name="CleanTagReviewShortcuts" xml:space="preserve"><value>← Sil   ·   → Tut   ·   ↓ Sonra</value></data>
   <data name="CleanTagReviewRecycleInfo" xml:space="preserve"><value>Silinen öğeler Geri Dönüşüm Kutusu’na taşınır. Onay kapalıysa sol ok hemen siler.</value></data>
+  <data name="CleanTagFolderContents" xml:space="preserve"><value>Klasör içeriği</value></data>
+  <data name="CleanTagFolderGrid" xml:space="preserve"><value>Küçük resimler</value></data>
+  <data name="CleanTagFolderList" xml:space="preserve"><value>Ayrıntılar</value></data>
+  <data name="CleanTagFolderSummary" xml:space="preserve"><value>Bu önizlemede: {0} klasör · {1} dosya</value></data>
+  <data name="CleanTagFolderScope" xml:space="preserve"><value>Yalnızca doğrudan içerik gösterilir. Sil, tut ve sonra işlemleri yukarıdaki klasörün tamamına uygulanır.</value></data>
+  <data name="CleanTagFolderLimited" xml:space="preserve"><value>İlk 100 erişilebilir öğe gösteriliyor. Tümü için Files içinde açın. İşlemler klasörün tamamına uygulanır.</value></data>
+  <data name="CleanTagPreviewArchive" xml:space="preserve"><value>Arşiv içeriği · Salt okunur; dosyalar çıkartılmadı.</value></data>
+  <data name="CleanTagPreviewArchiveLimited" xml:space="preserve"><value>İlk 300 arşiv öğesi · Dosyalar çıkartılmadı.</value></data>
+  <data name="CleanTagPreviewArchiveEmpty" xml:space="preserve"><value>Bu arşiv boş.</value></data>
+  <data name="CleanTagPreviewArchiveFailed" xml:space="preserve"><value>Arşiv listelenemedi. Bozuk veya desteklenmeyen biçimde olabilir ya da dosya adlarını okumak için parola gerektirebilir.</value></data>
+  <data name="CleanTagPreviewEncrypted" xml:space="preserve"><value>Şifreli</value></data>
+  <data name="CleanTagPreviewPdf" xml:space="preserve"><value>Belge önizlemesi · Sayfalar arasında geçiş için düğmeleri kullanın.</value></data>
+  <data name="CleanTagPreviewPrevious" xml:space="preserve"><value>Önceki sayfa</value></data>
+  <data name="CleanTagPreviewNext" xml:space="preserve"><value>Sonraki sayfa</value></data>
+  <data name="CleanTagPreviewEmbedded" xml:space="preserve"><value>Gömülü / Windows görsel önizlemesi</value></data>
+  <data name="CleanTagPreviewSystem" xml:space="preserve"><value>Windows önizleme sağlayıcısı</value></data>
+  <data name="CleanTagPreviewUnavailable" xml:space="preserve"><value>Okunabilir görsel veya kurulu önizleme sağlayıcısı bulunamadı. Dosya uyumlu önizleme içermiyor olabilir ya da kendi uygulamasını gerektirebilir.</value></data>
+  <data name="CleanTagReviewDecisionFocus" xml:space="preserve"><value>Ok tuşlarıyla karar ver</value></data>
+  <data name="CleanTagReviewModeShort" xml:space="preserve"><value>İnceleme modu</value></data>
+  <data name="CleanTagInspectorTags" xml:space="preserve"><value>Etiketler</value></data>
+  <data name="CleanTagInspectorSearch" xml:space="preserve"><value>Etiket ara</value></data>
+  <data name="CleanTagInspectorCreate" xml:space="preserve"><value>Oluştur ve ata</value></data>
+  <data name="CleanTagInspectorHint" xml:space="preserve"><value>Değişiklikler anında kaydedilir. Klasör etiketi yalnızca klasörün kendisine uygulanır.</value></data>
+  <data name="CleanTagInspectorEmpty" xml:space="preserve"><value>Bir klasör ve inceleme modu seçin.</value></data>
+  <data name="CleanTagInspectorNoTags" xml:space="preserve"><value>Eşleşen etiket yok. Aşağıdan oluşturabilirsiniz.</value></data>
+  <data name="CleanTagTagDeleteFailed" xml:space="preserve"><value>Bazı öğelerin etiketleri güncellenemedi. Etiket tanımı korundu. Öğelerin bağlı ve yazılabilir olduğunu kontrol edip yeniden deneyin.</value></data>
 </root>

@@ -1,0 +1,22 @@
+<UserControl x:Class="Files.App.UserControls.CleanTag.CleanTagTagInspector"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:helpers="using:Files.App.Helpers">
+	<Grid RowSpacing="16" Padding="20,16">
+		<Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+		<StackPanel Spacing="4">
+			<TextBlock Text="{helpers:ResourceString Name=CleanTagInspectorTags}" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+			<TextBlock x:Name="TargetName" TextTrimming="CharacterEllipsis" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+		</StackPanel>
+		<TextBox x:Name="Search" Grid.Row="1" PlaceholderText="{helpers:ResourceString Name=CleanTagInspectorSearch}" AutomationProperties.Name="{helpers:ResourceString Name=CleanTagInspectorSearch}" TextChanged="Search_TextChanged"/>
+		<ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled"><StackPanel x:Name="Choices" Spacing="4"/></ScrollViewer>
+		<StackPanel Grid.Row="3" Spacing="8">
+			<TextBlock Text="{helpers:ResourceString Name=CleanTagInspectorCreate}" Style="{ThemeResource BodyStrongTextBlockStyle}"/>
+			<Grid ColumnSpacing="8"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+				<TextBox x:Name="NewName" PlaceholderText="{helpers:ResourceString Name=CleanTagNewTag}" AutomationProperties.Name="{helpers:ResourceString Name=CleanTagNewTag}" KeyDown="NewName_KeyDown"/>
+				<Button Grid.Column="1" Click="Create_Click" AutomationProperties.Name="{helpers:ResourceString Name=CleanTagInspectorCreate}"><SymbolIcon Symbol="Add"/></Button>
+			</Grid>
+			<TextBlock Text="{helpers:ResourceString Name=CleanTagInspectorHint}" TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+		</StackPanel>
+	</Grid>
+</UserControl>

@@ -131,6 +131,8 @@ namespace Files.App.ViewModels.UserControls
 				var oldType = previewPaneContent?.GetType()?.Name;
 				var newType = value?.GetType()?.Name;
 				App.Logger.LogDebug($"PreviewPaneContent changing: {oldType} -> {newType}");
+				if (!ReferenceEquals(previewPaneContent, value) && previewPaneContent is Files.App.UserControls.CleanTag.CleanTagDocumentPreview document)
+					document.Dispose();
 				SetProperty(ref previewPaneContent, value);
 			}
 		}
@@ -225,7 +227,10 @@ namespace Files.App.ViewModels.UserControls
 			var control = await GetBuiltInPreviewControlAsync(item, downloadItem);
 
 			if (token.IsCancellationRequested)
+			{
+				if (control is Files.App.UserControls.CleanTag.CleanTagDocumentPreview document) document.Dispose();
 				return;
+			}
 
 			if (control is not null)
 			{
@@ -274,6 +279,13 @@ namespace Files.App.ViewModels.UserControls
 				await model.LoadAsync();
 
 				return new BasicPreview(model);
+			}
+
+			if (item.FileExtension is { } previewExtension && Files.App.UserControls.CleanTag.CleanTagDocumentPreview.Supports(previewExtension))
+			{
+				var preview = new Files.App.UserControls.CleanTag.CleanTagDocumentPreview();
+				_ = preview.LoadAsync(item.ItemPath!);
+				return preview;
 			}
 
 			if (FileExtensionHelpers.IsBrowsableZipFile(item.FileExtension, out _))

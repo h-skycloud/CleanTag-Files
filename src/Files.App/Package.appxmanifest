@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--  Copyright (c) Files Community. Licensed under the MIT License.  -->
 <Package
     xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
@@ -17,12 +17,12 @@
     <Identity
         Name="CleanTag.Files.Experimental"
         Publisher="CN=CleanTag"
-        Version="4.3.0.0" />
+        Version="4.3.1.0" />
 
     <Properties>
-        <DisplayName>CleanTag Experimental</DisplayName>
+        <DisplayName>CleanTag Files</DisplayName>
         <PublisherDisplayName>CleanTag contributors</PublisherDisplayName>
-        <Logo>Assets\AppTiles\Dev\StoreLogo.png</Logo>
+        <Logo>Assets\CleanTag\StoreLogo.png</Logo>
         <desktop6:FileSystemWriteVirtualization>disabled</desktop6:FileSystemWriteVirtualization>
         <virtualization:RegistryWriteVirtualization>
             <virtualization:ExcludedKeys>
@@ -95,25 +95,22 @@
             desktop4:SupportsMultipleInstances="true">
 
             <uap:VisualElements
-                DisplayName="CleanTag Experimental"
+                DisplayName="CleanTag Files"
                 Description="Organize your files and folders easily. Robust multitasking experiences, helpful tags, and deep integrations add to an intuitive design, made by the community."
-                Square150x150Logo="Assets\AppTiles\Dev\Square150x150Logo.png"
-                Square44x44Logo="Assets\AppTiles\Dev\Square44x44Logo.png"
+                Square150x150Logo="Assets\CleanTag\Square150x150Logo.png"
+                Square44x44Logo="Assets\CleanTag\Square44x44Logo.png"
                 BackgroundColor="transparent">
 
                 <uap:DefaultTile
-                    Wide310x150Logo="Assets\AppTiles\Dev\Wide310x150Logo.png"
-                    Square71x71Logo="Assets\AppTiles\Dev\Small71x71Logo.png"
-                    Square310x310Logo="Assets\AppTiles\Dev\Large310x310Logo.png"
-                    ShortName="CleanTag Experimental">
+                    Wide310x150Logo="Assets\CleanTag\Wide310x150Logo.png"
+                    ShortName="CleanTag Files">
                     <uap:ShowNameOnTiles>
                         <uap:ShowOn Tile="square150x150Logo" />
                         <uap:ShowOn Tile="wide310x150Logo" />
-                        <uap:ShowOn Tile="square310x310Logo" />
                     </uap:ShowNameOnTiles>
                 </uap:DefaultTile>
 
-                <uap:SplashScreen uap5:Optional="true" Image="Assets\AppTiles\Dev\SplashScreen.png" />
+                <uap:SplashScreen uap5:Optional="true" Image="Assets\CleanTag\SplashScreen.png" />
 
             </uap:VisualElements>
 

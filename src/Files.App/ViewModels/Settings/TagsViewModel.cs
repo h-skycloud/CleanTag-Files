@@ -1,4 +1,4 @@
-﻿// Copyright (c) Files Community
+// Copyright (c) Files Community
 // Licensed under the MIT License.
 
 using System.Windows.Input;
@@ -92,13 +92,14 @@ namespace Files.App.ViewModels.Settings
 			isBulkOperation = false;
 		}
 
-		public void DeleteExistingTag(ListedTagViewModel item)
+		public async Task<bool> DeleteExistingTagAsync(ListedTagViewModel item)
 		{
+			if (!await fileTagsSettingsService.DeleteTagAsync(item.Tag.Uid))
+				return false;
 			isBulkOperation = true;
 			Tags.Remove(item);
 			isBulkOperation = false;
-
-			fileTagsSettingsService.DeleteTag(item.Tag.Uid);
+			return true;
 		}
 	}
 

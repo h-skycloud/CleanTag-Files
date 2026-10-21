@@ -214,7 +214,7 @@ namespace Files.App
 						SystemTrayIcon.Show();
 
 					// Sleep current instance
-					var pool = new Semaphore(0, 1, $"Files-{AppLifecycleHelper.AppEnvironment}-Instance");
+					var pool = new Semaphore(0, 1, $"{Windows.ApplicationModel.Package.Current.Id.Name}-Instance");
 					Program.Pool = pool;
 
 					var cts = new CancellationTokenSource();
@@ -375,7 +375,7 @@ namespace Files.App
 				ApplicationData.Current.LocalSettings.Values["INSTANCE_ACTIVE"] = -Environment.ProcessId;
 
 				// Sleep current instance
-				var pool = new Semaphore(0, 1, $"Files-{AppLifecycleHelper.AppEnvironment}-Instance");
+				var pool = new Semaphore(0, 1, $"{Windows.ApplicationModel.Package.Current.Id.Name}-Instance");
 				Program.Pool = pool;
 
 				// Displays a notification the first time the app goes to the background

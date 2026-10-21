@@ -1,4 +1,4 @@
-﻿// Copyright (c) Files Community
+// Copyright (c) Files Community
 // Licensed under the MIT License.
 
 namespace Files.App.Data.Contracts
@@ -21,7 +21,7 @@ namespace Files.App.Data.Contracts
 
 		void EditTag(string uid, string name, string color);
 
-		void DeleteTag(string uid);
+		Task<bool> DeleteTagAsync(string uid);
 
 		object ExportSettings();
 

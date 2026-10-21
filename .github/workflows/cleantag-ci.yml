@@ -1,0 +1,34 @@
+name: CleanTag Files
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    if: github.repository_owner == 'h-skycloud'
+    runs-on: windows-2025-vs2026
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build x64 release
+        shell: pwsh
+        run: ./build-cleantag.ps1 -Configuration Release
+      - name: Check analysis and preview readers
+        shell: pwsh
+        run: dotnet run --project tests/CleanTag.Analysis.Checks/CleanTag.Analysis.Checks.csproj -p:Platform=x64
+      - name: Package unsigned developer layout
+        shell: pwsh
+        run: ./tools/New-CleanTagFilesRelease.ps1
+      - uses: actions/upload-artifact@v7
+        with:
+          name: CleanTag-Files-windows-x64
+          path: |
+            artifacts/*.zip
+            artifacts/*.sha256
+          if-no-files-found: error

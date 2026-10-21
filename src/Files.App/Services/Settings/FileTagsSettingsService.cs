@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 using System.IO;
 using Windows.Storage;
+using CleanTag.Core;
+using FileAttributes = System.IO.FileAttributes;
 
 namespace Files.App.Services.Settings
 {
@@ -122,16 +124,26 @@ namespace Files.App.Services.Settings
 			FileTagList = oldTags;
 		}
 
-		public void DeleteTag(string uid)
-		{
-			var index = GetTagIndex(uid);
-			if (index == -1)
-				return;
+		private readonly SemaphoreSlim deleteGate = new(1, 1);
 
-			var oldTags = FileTagList.ToList();
-			oldTags.RemoveAt(index);
-			FileTagList = oldTags;
-			UntagAllFiles(uid);
+		public async Task<bool> DeleteTagAsync(string uid)
+		{
+			await deleteGate.WaitAsync();
+			try
+			{
+				if (GetTagIndex(uid) == -1)
+					return true;
+				if (!await UntagAllFilesAsync(uid))
+					return false;
+				FileTagList = FileTagList.Where(tag => tag.Uid != uid).ToList();
+				return true;
+			}
+			catch (Exception ex)
+			{
+				App.Logger.LogWarning(ex, "Could not complete tag deletion; its definition was retained.");
+				return false;
+			}
+			finally { deleteGate.Release(); }
 		}
 
 		public override bool ImportSettings(object import)
@@ -181,19 +193,42 @@ namespace Files.App.Services.Settings
 			return -1;
 		}
 
-		private void UntagAllFiles(string uid)
+		private async Task<bool> UntagAllFilesAsync(string uid)
 		{
-			var tagDoDelete = new string[] { uid };
-
-			foreach (var item in FileTagsHelper.GetDbInstance().GetAll())
+			var database = FileTagsHelper.GetDbInstance();
+			bool succeeded = true;
+			foreach (var item in database.GetAll().Where(item => item.Tags.Contains(uid)))
 			{
-				if (item.Tags.Contains(uid))
+				try
 				{
-					_ = FileTagsHelper.WriteFileTagAsync(
-						item.FilePath,
-						item.Tags.Except(tagDoDelete).ToArray());
+					// Resolve renamed items by identity before changing their current ADS.
+					var path = item.Frn is not null
+						? Win32Helper.PathFromFileId(item.Frn.Value, item.FilePath)?.Replace(@"\\?\", "", StringComparison.Ordinal)
+						: item.FilePath;
+					if (path is null)
+						throw new IOException("The tagged item could not be resolved.");
+					var attributes = File.GetAttributes(path);
+					FileSafety.CheckAncestors(attributes.HasFlag(FileAttributes.Directory) ? path : Path.GetDirectoryName(path)!);
+					if ((attributes & (FileAttributes.ReparsePoint | FileAttributes.Offline | FileAttributes.System)) != 0)
+						throw new IOException("The tagged item is not available for writing.");
+					var identity = FileTagsHelper.GetFileFRN(path);
+					if (item.Frn is not null && identity != item.Frn)
+						throw new IOException("The tagged item has changed.");
+					var remaining = FileTagsHelper.ReadFileTag(path).Where(tag => tag != uid).ToArray();
+					if (!await FileTagsHelper.WriteFileTagAsync(path, remaining))
+						throw new IOException("The tag could not be removed.");
+					if (!path.Equals(item.FilePath, StringComparison.OrdinalIgnoreCase))
+						database.UpdateTag(item.FilePath, identity, path);
+					database.SetTags(path, identity, remaining);
 				}
+				catch (Exception ex)
+				{
+					succeeded = false;
+					App.Logger.LogWarning(ex, "Could not remove a tag from an indexed item.");
+				}
+				await Task.Yield();
 			}
+			return succeeded;
 		}
 
 		private IJsonSettingsSerializer GetJsonSettingsSerializer()

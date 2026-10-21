@@ -59,6 +59,30 @@ try
 	loaded = await store.LoadAsync();
 	Check(loaded.Count == 3 && loaded.Single(record => record.Entry.FullPath == first.FullPath).Decision == ReviewDecision.Later,
 		"Concurrent review windows merge records without losing decisions");
+	var design = Path.Combine(root, "embedded.psd");
+	byte[] jpeg = [0xFF, 0xD8, 0xFF, 0xD9];
+	using (var output = File.Create(design))
+	{
+		void Write32(uint value) { Span<byte> bytes = stackalloc byte[4]; System.Buffers.Binary.BinaryPrimitives.WriteUInt32BigEndian(bytes, value); output.Write(bytes); }
+		void Write16(ushort value) { Span<byte> bytes = stackalloc byte[2]; System.Buffers.Binary.BinaryPrimitives.WriteUInt16BigEndian(bytes, value); output.Write(bytes); }
+		output.Write("8BPS"u8); Write16(1); output.Write(new byte[20]);
+		Write32(0); Write32(44);
+		output.Write("8BIM"u8); Write16(1036); output.WriteByte(0); output.WriteByte(0); Write32(32);
+		Write32(1); output.Write(new byte[24]); output.Write(jpeg);
+	}
+	Check(EmbeddedPreviewReader.ReadPhotoshopThumbnail(design, default)?.SequenceEqual(jpeg) == true, "PSD embedded JPEG is recovered without reading layers");
+	using (var output = new FileStream(design, FileMode.Open, FileAccess.Write)) { output.Position = 4; output.Write([0, 2]); }
+	Check(EmbeddedPreviewReader.ReadPhotoshopThumbnail(design, default)?.SequenceEqual(jpeg) == true, "PSB embedded JPEG uses the same bounded resource parser");
+	bool previewCancelled = false;
+	try { EmbeddedPreviewReader.ReadPhotoshopThumbnail(design, cancellation.Token); } catch (OperationCanceledException) { previewCancelled = true; }
+	Check(previewCancelled, "Embedded image loading honors cancellation");
+	using (var output = new FileStream(design, FileMode.Open, FileAccess.Write)) { output.Position = 30; output.Write([0x7F, 0xFF, 0xFF, 0xFF]); }
+	Check(EmbeddedPreviewReader.ReadPhotoshopThumbnail(design, default) is null, "Malformed resource length cannot allocate or read beyond the file");
+	var illustrator = Path.Combine(root, "compatible.ai");
+	await File.WriteAllTextAsync(illustrator, "%PDF-1.7\n% Illustrator PDF-compatible fixture");
+	Check(EmbeddedPreviewReader.IsPdf(illustrator), "PDF-compatible AI is identified by content, not extension");
+	await File.WriteAllTextAsync(illustrator, "%!PS-Adobe-3.0\n");
+	Check(!EmbeddedPreviewReader.IsPdf(illustrator), "PostScript AI is not sent to the PDF renderer");
 	Console.WriteLine($"PASS: {checks} analysis integration checks");
 }
 finally

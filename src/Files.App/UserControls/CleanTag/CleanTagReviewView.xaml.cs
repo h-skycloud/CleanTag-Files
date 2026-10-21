@@ -21,6 +21,8 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	private List<ReviewRecord> records = [];
 	private ReviewSession? session;
 	private BasePreviewModel? previewModel;
+	private CleanTagFolderContents? folderContents;
+	private CleanTagDocumentPreview? documentPreview;
 	private string root = "";
 	private bool busy, disposed;
 	private bool arrowKeysEnabled = true, confirmDelete = true, laterOnly;
@@ -32,11 +34,22 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	public CleanTagReviewView()
 	{
 		InitializeComponent();
+		PreviewKeyDown += Review_PreviewKeyDown;
+		Inspector.BusyChanged += SetBusy;
+		Inspector.Failed += Error;
 		var preferences = ApplicationData.Current.LocalSettings.Values;
 		if (preferences.TryGetValue("CleanTag.Review.ArrowKeys", out var keys) && keys is bool enabled) arrowKeysEnabled = enabled;
 		if (preferences.TryGetValue("CleanTag.Review.ConfirmDelete", out var confirm) && confirm is bool ask) confirmDelete = ask;
 		if (preferences.TryGetValue("CleanTag.Review.Sort", out var order) && order is int index && index is >= 0 and <= 2) sortOrder = index;
 		UpdateShortcutHint();
+	}
+	private async void Review_PreviewKeyDown(object sender, KeyRoutedEventArgs e) => await TryHandleDecisionKeyAsync(e);
+	private void DecisionFocus_Click(object sender, RoutedEventArgs e)
+	{
+		arrowKeysEnabled = true;
+		ApplicationData.Current.LocalSettings.Values["CleanTag.Review.ArrowKeys"] = true;
+		UpdateShortcutHint();
+		Focus(FocusState.Programmatic);
 	}
 
 	internal async Task<bool> TryHandleDecisionKeyAsync(KeyRoutedEventArgs e)
@@ -60,7 +73,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 		while (element is not null && element != this)
 		{
 			if (element is TextBox or PasswordBox or RichEditBox or AutoSuggestBox or ComboBox or Slider or RadioButton or
-				ToggleSwitch or ListViewBase or MediaPlayerElement or TextBlock { IsTextSelectionEnabled: true }) return true;
+				ToggleSwitch or MediaPlayerElement) return true;
 			element = VisualTreeHelper.GetParent(element);
 		}
 		return false;
@@ -184,6 +197,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 			return;
 		}
 		ItemTitle.Text = item.Name;
+		Inspector.SetTarget(item.FullPath, item.IsDirectory);
 		ItemDetails.Text = $"{item.FullPath}\n{(item.IsDirectory ? Strings.Folder.GetLocalizedResource() : FileEntry.FormatSize(item.Size))} · {item.ModifiedLabel}";
 		Message(string.Format(Strings.CleanTagReviewRemaining.GetLocalizedResource(), session.Remaining));
 		int version = generation;
@@ -192,14 +206,17 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 			ReviewSafety.Validate(root, item, FileTagsHelper.GetFileFRN(item.FullPath)?.ToString());
 			if (item.IsDirectory)
 			{
-				var names = await Task.Run(() => new IO.DirectoryInfo(item.FullPath).EnumerateFileSystemInfos().Take(101)
-					.Select(child => child.Name + ((child.Attributes & IO.FileAttributes.Directory) != 0 ? " /" : "")).ToArray(), lifetime.Token);
-				if (disposed || version != generation) return;
-				var panel = new StackPanel { Spacing = 6 };
-				if (names.Length == 0) panel.Children.Add(new TextBlock { Text = Strings.CleanTagReviewEmptyFolder.GetLocalizedResource() });
-				foreach (string name in names.Take(100)) panel.Children.Add(new TextBlock { Text = name });
-				if (names.Length > 100) panel.Children.Add(new TextBlock { Text = Strings.CleanTagReviewMore.GetLocalizedResource() });
-				Preview.Content = new ScrollViewer { Content = panel };
+				var contents = new CleanTagFolderContents();
+				folderContents = contents;
+				Preview.Content = contents;
+				await contents.LoadAsync(item.FullPath);
+			}
+			else if (CleanTagDocumentPreview.Supports(item.Extension))
+			{
+				var document = new CleanTagDocumentPreview { ReleaseOnUnload = false };
+				documentPreview = document;
+				Preview.Content = document;
+				_ = document.LoadAsync(item.FullPath);
 			}
 			else
 			{
@@ -231,6 +248,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 				Preview.Content = control();
 			}
 		}
+		catch (OperationCanceledException) when (disposed) { }
 		catch (Exception ex) { Error(ex); }
 	}
 	private async Task DecideAsync(ReviewDecision decision)
@@ -253,6 +271,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 					DefaultButton = ContentDialogButton.Close };
 				if (await confirmation.ShowAsync() != ContentDialogResult.Primary || disposed) return;
 				}
+				if (documentPreview is not null) await documentPreview.ReleaseAsync();
 				ClearPreview();
 				recycled = await FileOperationsHelpers.RecycleReviewItemAsync(root, item, MainWindow.Instance.WindowHandle);
 				if (!recycled) throw new IO.IOException(Strings.CleanTagReviewRecycleFailed.GetLocalizedResource());
@@ -296,10 +315,16 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 		Decisions.IsEnabled = !value && session?.Current is not null;
 		if (!value && session?.Current is not null) Focus(FocusState.Programmatic);
 	}
-	private void Message(string message, InfoBarSeverity severity = InfoBarSeverity.Informational) { Status.Message = message; Status.Severity = severity; }
+	private void Message(string message, InfoBarSeverity severity = InfoBarSeverity.Informational)
+	{
+		StatusLine.Text = message;
+		Status.Message = message;
+		Status.Severity = severity;
+		Status.IsOpen = severity is InfoBarSeverity.Warning or InfoBarSeverity.Error;
+	}
 	private void Error(Exception ex) { App.Logger.LogError(ex, "CleanTag review failed"); if (!disposed) Message(Strings.CleanTagError.GetLocalizedResource() + ": " + ex.Message, InfoBarSeverity.Error); }
-	private void ClearPreview() { Preview.Content = null; previewModel?.PreviewControlBase_Unloaded(null, new()); previewModel = null; }
+	private void ClearPreview() { Inspector.SetTarget(null, false); documentPreview?.Dispose(); documentPreview = null; folderContents?.Dispose(); folderContents = null; Preview.Content = null; previewModel?.PreviewControlBase_Unloaded(null, new()); previewModel = null; }
 	private void Back_Click(object sender, RoutedEventArgs e) => CloseRequested?.Invoke();
 	private void View_Unloaded(object sender, RoutedEventArgs e) => Dispose();
-	public void Dispose() { if (disposed) return; disposed = true; generation++; lifetime.Cancel(); ClearPreview(); }
+	public void Dispose() { if (disposed) return; disposed = true; generation++; lifetime.Cancel(); ClearPreview(); Inspector.Dispose(); }
 }

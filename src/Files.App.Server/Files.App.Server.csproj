@@ -1,4 +1,4 @@
-﻿<!--  Copyright (c) Files Community. Licensed under the MIT License.  -->
+<!--  Copyright (c) Files Community. Licensed under the MIT License.  -->
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
@@ -26,6 +26,11 @@
         <PublishAot>true</PublishAot>
         <SelfContained>true</SelfContained>
     </PropertyGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+        <!-- Keep native debug references independent of the developer's home path. -->
+        <LinkerArg Include="/PDBALTPATH:Files.App.Server.pdb" />
+    </ItemGroup>
 
     <ItemGroup>
         <Manifest Include="app.manifest" />

@@ -574,6 +574,8 @@ namespace Files.App.Views
 
 		private void Page_PointerReleased(object sender, PointerRoutedEventArgs e)
 		{
+			// A review click must not send keyboard focus back to the ordinary file pane.
+			if ((e.OriginalSource as DependencyObject)?.FindAscendantOrSelf<UserControls.CleanTag.CleanTagReviewView>() is not null) return;
 			// Workaround for issue where clicking an empty area in the window (toolbar, title bar etc) prevents keyboard
 			// shortcuts from working properly, see https://github.com/microsoft/microsoft-ui-xaml/issues/6467
 			DispatcherQueue.TryEnqueue(() => ContentPageContext.ShellPage?.PaneHolder?.FocusActivePane());

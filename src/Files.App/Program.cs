@@ -48,7 +48,7 @@ namespace Files.App
 			// paths like "." against the terminal's CWD rather than its own. (#16982)
 			ApplicationData.Current.LocalSettings.Values[LaunchCwdKey] = Environment.CurrentDirectory;
 
-			var pool = new Semaphore(0, 1, $"Files-{AppLifecycleHelper.AppEnvironment}-Instance", out var isNew);
+			var pool = new Semaphore(0, 1, $"{Windows.ApplicationModel.Package.Current.Id.Name}-Instance", out var isNew);
 
 			if (!isNew)
 			{

@@ -4748,7 +4748,7 @@
   <data name="CleanTagChooseFolder" xml:space="preserve"><value>Choose a folder to analyze</value></data>
   <data name="CleanTagStop" xml:space="preserve"><value>Stop</value></data>
   <data name="CleanTagUp" xml:space="preserve"><value>Parent folder</value></data>
-  <data name="CleanTagTags" xml:space="preserve"><value>Files tags</value></data>
+  <data name="CleanTagTags" xml:space="preserve"><value>Edit tags</value></data>
   <data name="CleanTagItems" xml:space="preserve"><value>Files and folders by logical size</value></data>
   <data name="CleanTagMore" xml:space="preserve"><value>Show more</value></data>
   <data name="CleanTagEmptyMap" xml:space="preserve"><value>No positive-size files here. Zero-byte items appear in the list.</value></data>
@@ -4758,17 +4758,17 @@
   <data name="CleanTagPartial" xml:space="preserve"><value>Cancelled — partial results</value></data>
   <data name="CleanTagComplete" xml:space="preserve"><value>Analysis complete</value></data>
   <data name="CleanTagWarnings" xml:space="preserve"><value>warnings</value></data>
-  <data name="CleanTagNewTag" xml:space="preserve"><value>New tag (optional)</value></data>
+  <data name="CleanTagNewTag" xml:space="preserve"><value>New tag name</value></data>
   <data name="CleanTagSave" xml:space="preserve"><value>Save</value></data>
   <data name="CleanTagSaved" xml:space="preserve"><value>Tags saved in Files</value></data>
-  <data name="CleanTagBrowse" xml:space="preserve"><value>Browse in Files</value></data>
+  <data name="CleanTagBrowse" xml:space="preserve"><value>Open in file manager</value></data>
   <data name="CleanTagChanged" xml:space="preserve"><value>The item changed. Scan it again before editing tags.</value></data>
   <data name="CleanTagReview" xml:space="preserve"><value>Review</value></data>
   <data name="CleanTagReviewStart" xml:space="preserve"><value>Start / refresh</value></data>
   <data name="CleanTagReviewDeferred" xml:space="preserve"><value>Review later items</value></data>
   <data name="CleanTagReviewMode" xml:space="preserve"><value>Choose what to review</value></data>
-  <data name="CleanTagReviewFiles" xml:space="preserve"><value>1 — Files</value></data>
-  <data name="CleanTagReviewFolders" xml:space="preserve"><value>2 — Folders</value></data>
+  <data name="CleanTagReviewFiles" xml:space="preserve"><value>Files</value></data>
+  <data name="CleanTagReviewFolders" xml:space="preserve"><value>Folders</value></data>
   <data name="CleanTagReviewIntro" xml:space="preserve"><value>Choose a folder, then select Files or Folders.</value></data>
   <data name="CleanTagReviewLoading" xml:space="preserve"><value>Loading folder contents…</value></data>
   <data name="CleanTagReviewDelete" xml:space="preserve"><value>Recycle</value></data>
@@ -4793,4 +4793,30 @@
   <data name="CleanTagReviewSortDate" xml:space="preserve"><value>Newest modified first</value></data>
   <data name="CleanTagReviewShortcuts" xml:space="preserve"><value>← Recycle   ·   → Keep   ·   ↓ Later</value></data>
   <data name="CleanTagReviewRecycleInfo" xml:space="preserve"><value>Deleted items go to the Recycle Bin. With confirmation disabled, Left recycles immediately.</value></data>
+  <data name="CleanTagFolderContents" xml:space="preserve"><value>Folder contents</value></data>
+  <data name="CleanTagFolderGrid" xml:space="preserve"><value>Thumbnails</value></data>
+  <data name="CleanTagFolderList" xml:space="preserve"><value>Details</value></data>
+  <data name="CleanTagFolderSummary" xml:space="preserve"><value>In this preview: {0} folders · {1} files</value></data>
+  <data name="CleanTagFolderScope" xml:space="preserve"><value>Immediate contents only. Review actions apply to the whole folder shown above.</value></data>
+  <data name="CleanTagFolderLimited" xml:space="preserve"><value>First 100 available items shown. Open in Files to see everything. Review actions apply to the whole folder.</value></data>
+  <data name="CleanTagPreviewArchive" xml:space="preserve"><value>Archive contents · Read only; nothing was extracted.</value></data>
+  <data name="CleanTagPreviewArchiveLimited" xml:space="preserve"><value>First 300 archive entries · Nothing was extracted.</value></data>
+  <data name="CleanTagPreviewArchiveEmpty" xml:space="preserve"><value>This archive is empty.</value></data>
+  <data name="CleanTagPreviewArchiveFailed" xml:space="preserve"><value>The archive could not be listed. It may be damaged, unsupported, or require a password to read its filenames.</value></data>
+  <data name="CleanTagPreviewEncrypted" xml:space="preserve"><value>Encrypted</value></data>
+  <data name="CleanTagPreviewPdf" xml:space="preserve"><value>Document preview · Use the page buttons to browse.</value></data>
+  <data name="CleanTagPreviewPrevious" xml:space="preserve"><value>Previous page</value></data>
+  <data name="CleanTagPreviewNext" xml:space="preserve"><value>Next page</value></data>
+  <data name="CleanTagPreviewEmbedded" xml:space="preserve"><value>Embedded / Windows image preview</value></data>
+  <data name="CleanTagPreviewSystem" xml:space="preserve"><value>Windows preview handler</value></data>
+  <data name="CleanTagPreviewUnavailable" xml:space="preserve"><value>No readable image or installed preview provider was found. The file may not contain a compatible preview, or may require its own application.</value></data>
+  <data name="CleanTagReviewDecisionFocus" xml:space="preserve"><value>Use arrow keys to decide</value></data>
+  <data name="CleanTagReviewModeShort" xml:space="preserve"><value>Review mode</value></data>
+  <data name="CleanTagInspectorTags" xml:space="preserve"><value>Tags</value></data>
+  <data name="CleanTagInspectorSearch" xml:space="preserve"><value>Find a tag</value></data>
+  <data name="CleanTagInspectorCreate" xml:space="preserve"><value>Create and assign</value></data>
+  <data name="CleanTagInspectorHint" xml:space="preserve"><value>Changes are saved immediately. Folder tags apply to the folder itself.</value></data>
+  <data name="CleanTagInspectorEmpty" xml:space="preserve"><value>Select a folder and review mode.</value></data>
+  <data name="CleanTagInspectorNoTags" xml:space="preserve"><value>No matching tags. Create one below.</value></data>
+  <data name="CleanTagTagDeleteFailed" xml:space="preserve"><value>Some items could not be updated. The tag definition was kept. Check that tagged items are available and writable, then try again.</value></data>
 </root>
