@@ -2,6 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <SentryDisableSourceGenerator>true</SentryDisableSourceGenerator>
+    </PropertyGroup>
+    <ItemGroup>
+        <CompilerVisibleProperty Include="SentryDisableSourceGenerator" />
+    </ItemGroup>
+
+    <PropertyGroup>
         <EnableMsixTooling>true</EnableMsixTooling>
         <PublishProfile>Properties\PublishProfiles\win-$(Platform).pubxml</PublishProfile>
         <TargetFramework>$(WindowsTargetFramework)</TargetFramework>
