@@ -72,7 +72,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	{
 		while (element is not null && element != this)
 		{
-			if (element is TextBox or PasswordBox or RichEditBox or AutoSuggestBox or ComboBox or Slider or RadioButton or
+			if (element is TextBox or PasswordBox or RichEditBox or AutoSuggestBox or ComboBox or Slider or RadioButton or CheckBox or
 				ToggleSwitch or MediaPlayerElement) return true;
 			element = VisualTreeHelper.GetParent(element);
 		}
