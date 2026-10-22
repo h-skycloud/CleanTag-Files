@@ -76,6 +76,14 @@ the legacy internal `CleanTag.Files.Experimental` package identity is retained;
 the displayed product name is CleanTag Files. The internal Windows package
 version follows the Files baseline and is distinct from the CleanTag release tag.
 
+When a newer CleanTag release retains the same internal Windows package version,
+Windows may keep the existing registered layout. The installer reports a
+registration verification failure instead of claiming the new files are active.
+Before replacing that layout, export settings and separately back up review
+history, uninstall only **CleanTag Files**, install the new archive, then restore
+the saved metadata. Uninstalling without a verified backup can lose the private
+tag index. This developer distribution has no automatic in-place updater.
+
 Public code signing and automatic updates are not configured. Do not describe
 this build as a signed production installer. Logs, catalogs, settings, exports,
 certificates and private keys are excluded from release inputs.
