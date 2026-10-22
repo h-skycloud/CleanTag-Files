@@ -197,13 +197,15 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 			return;
 		}
 		ItemTitle.Text = item.Name;
-		Inspector.SetTarget(item.FullPath, item.IsDirectory);
 		ItemDetails.Text = $"{item.FullPath}\n{(item.IsDirectory ? Strings.Folder.GetLocalizedResource() : FileEntry.FormatSize(item.Size))} · {item.ModifiedLabel}";
 		Message(string.Format(Strings.CleanTagReviewRemaining.GetLocalizedResource(), session.Remaining));
 		int version = generation;
 		try
 		{
 			ReviewSafety.Validate(root, item, FileTagsHelper.GetFileFRN(item.FullPath)?.ToString());
+			var reviewRoot = root;
+			Inspector.SetTarget(item.FullPath, item.IsDirectory,
+				() => ReviewSafety.Validate(reviewRoot, item, FileTagsHelper.GetFileFRN(item.FullPath)?.ToString()));
 			if (item.IsDirectory)
 			{
 				var contents = new CleanTagFolderContents();

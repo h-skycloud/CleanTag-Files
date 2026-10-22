@@ -13,6 +13,7 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 {
 	private readonly IFileTagsSettingsService settings = Ioc.Default.GetRequiredService<IFileTagsSettingsService>();
 	private string? path;
+	private Action? validateTarget;
 	private bool directory, busy, reviewBusy, disposed;
 	public event Action<bool>? BusyChanged;
 	public event Action<Exception>? Failed;
@@ -22,9 +23,10 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 		settings.OnTagsUpdated += TagsUpdated;
 		SetTarget(null, false);
 	}
-	public void SetTarget(string? target, bool isDirectory)
+	public void SetTarget(string? target, bool isDirectory, Action? validate = null)
 	{
 		path = target;
+		validateTarget = validate;
 		directory = isDirectory;
 		TargetName.Text = target is null ? Strings.CleanTagInspectorEmpty.GetLocalizedResource() : IO.Path.GetFileName(target);
 		IsEnabled = target is not null && !busy && !reviewBusy;
@@ -62,16 +64,20 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 	}
 	private async Task WriteAsync(string target, bool folder, string uid, bool selected)
 	{
+		var validate = validateTarget;
 		busy = true;
 		IsEnabled = false;
 		BusyChanged?.Invoke(true);
 		try
 		{
+			validate?.Invoke();
 			FileSafety.CheckAncestors(folder ? target : IO.Path.GetDirectoryName(target)!);
 			var identity = FileTagsHelper.GetFileFRN(target);
 			var modified = IO.File.GetLastWriteTimeUtc(target);
 			var storage = Ioc.Default.GetRequiredService<IStorageService>();
 			var storable = await storage.TryGetStorableAsync(target) ?? throw new IO.FileNotFoundException();
+			if (disposed) return;
+			validate?.Invoke();
 			FileSafety.CheckAncestors(folder ? target : IO.Path.GetDirectoryName(target)!);
 			if ((IO.File.GetAttributes(target) & (IO.FileAttributes.ReparsePoint | IO.FileAttributes.Offline | IO.FileAttributes.System)) != 0 ||
 				FileTagsHelper.GetFileFRN(target) != identity || IO.File.GetLastWriteTimeUtc(target) != modified)
@@ -108,5 +114,5 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 		}
 		catch (Exception ex) { Failed?.Invoke(ex); }
 	}
-	public void Dispose() { disposed = true; path = null; settings.OnTagsUpdated -= TagsUpdated; }
+	public void Dispose() { disposed = true; path = null; validateTarget = null; settings.OnTagsUpdated -= TagsUpdated; }
 }
