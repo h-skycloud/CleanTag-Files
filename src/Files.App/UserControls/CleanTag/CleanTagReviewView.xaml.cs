@@ -311,6 +311,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	private void SetBusy(bool value)
 	{
 		busy = value;
+		InspectorHost.IsEnabled = !value;
 		ChooseButton.IsEnabled = RefreshButton.IsEnabled = DeferredButton.IsEnabled = SettingsButton.IsEnabled = RootPath.IsEnabled = Mode.IsEnabled = !value;
 		Decisions.IsEnabled = !value && session?.Current is not null;
 		if (!value && session?.Current is not null) Focus(FocusState.Programmatic);
@@ -324,7 +325,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	}
 	private void Error(Exception ex) { App.Logger.LogError(ex, "CleanTag review failed"); if (!disposed) Message(Strings.CleanTagError.GetLocalizedResource() + ": " + ex.Message, InfoBarSeverity.Error); }
 	private void ClearPreview() { Inspector.SetTarget(null, false); documentPreview?.Dispose(); documentPreview = null; folderContents?.Dispose(); folderContents = null; Preview.Content = null; previewModel?.PreviewControlBase_Unloaded(null, new()); previewModel = null; }
-	private void Back_Click(object sender, RoutedEventArgs e) => CloseRequested?.Invoke();
+	private void Back_Click(object sender, RoutedEventArgs e) { if (!busy) CloseRequested?.Invoke(); }
 	private void View_Unloaded(object sender, RoutedEventArgs e) => Dispose();
 	public void Dispose() { if (disposed) return; disposed = true; generation++; lifetime.Cancel(); ClearPreview(); Inspector.Dispose(); }
 }
