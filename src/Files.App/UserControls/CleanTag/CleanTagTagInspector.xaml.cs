@@ -13,7 +13,7 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 {
 	private readonly IFileTagsSettingsService settings = Ioc.Default.GetRequiredService<IFileTagsSettingsService>();
 	private string? path;
-	private bool directory, busy, disposed;
+	private bool directory, busy, reviewBusy, disposed;
 	public event Action<bool>? BusyChanged;
 	public event Action<Exception>? Failed;
 	public CleanTagTagInspector()
@@ -27,9 +27,10 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 		path = target;
 		directory = isDirectory;
 		TargetName.Text = target is null ? Strings.CleanTagInspectorEmpty.GetLocalizedResource() : IO.Path.GetFileName(target);
-		IsEnabled = target is not null && !busy;
+		IsEnabled = target is not null && !busy && !reviewBusy;
 		Refresh();
 	}
+	public void SetReviewBusy(bool value) { reviewBusy = value; IsEnabled = path is not null && !busy && !reviewBusy; }
 	private void TagsUpdated(object? sender, EventArgs e) => DispatcherQueue.TryEnqueue(() => { if (!disposed && !busy) Refresh(); });
 	private void Search_TextChanged(object sender, TextChangedEventArgs e) { if (Choices is not null) Refresh(); }
 	private void Refresh()
@@ -56,7 +57,7 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 	}
 	private async Task ChangeAsync(string uid, bool selected)
 	{
-		if (busy || disposed || path is null) return;
+		if (busy || reviewBusy || disposed || path is null) return;
 		await WriteAsync(path, directory, uid, selected);
 	}
 	private async Task WriteAsync(string target, bool folder, string uid, bool selected)
@@ -85,7 +86,7 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 		finally
 		{
 			busy = false;
-			if (!disposed) { IsEnabled = path is not null; Refresh(); BusyChanged?.Invoke(false); }
+			if (!disposed) { IsEnabled = path is not null && !reviewBusy; Refresh(); BusyChanged?.Invoke(false); }
 		}
 	}
 	private async void Create_Click(object sender, RoutedEventArgs e) => await CreateAsync();
@@ -95,7 +96,7 @@ public sealed partial class CleanTagTagInspector : UserControl, IDisposable
 	}
 	private async Task CreateAsync()
 	{
-		if (busy || disposed || path is null || string.IsNullOrWhiteSpace(NewName.Text)) return;
+		if (busy || reviewBusy || disposed || path is null || string.IsNullOrWhiteSpace(NewName.Text)) return;
 		string name = NewName.Text.Trim();
 		if (name.Length > 100) return;
 		try

@@ -311,7 +311,7 @@ public sealed partial class CleanTagReviewView : UserControl, IDisposable
 	private void SetBusy(bool value)
 	{
 		busy = value;
-		InspectorHost.IsEnabled = !value;
+		Inspector.SetReviewBusy(value);
 		ChooseButton.IsEnabled = RefreshButton.IsEnabled = DeferredButton.IsEnabled = SettingsButton.IsEnabled = RootPath.IsEnabled = Mode.IsEnabled = !value;
 		Decisions.IsEnabled = !value && session?.Current is not null;
 		if (!value && session?.Current is not null) Focus(FocusState.Programmatic);

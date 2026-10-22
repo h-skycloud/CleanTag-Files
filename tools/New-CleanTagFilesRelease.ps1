@@ -1,4 +1,4 @@
-param([string]$Version = '0.3.0-preview.1', [string]$Destination = (Join-Path $PSScriptRoot '../artifacts/release'))
+param([string]$Version = '0.3.0-preview.2', [string]$Destination = (Join-Path $PSScriptRoot '../artifacts/release'))
 $ErrorActionPreference = 'Stop'
 $repository = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $output = Join-Path $repository 'src/Files.App/bin/x64/Release/net10.0-windows10.0.26100.0/win-x64'
